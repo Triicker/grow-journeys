@@ -110,7 +110,7 @@ function HomePage() {
                   Aula experimental
                 </div>
                 <div className="inline-flex items-center gap-2 rounded-full bg-surface-2 px-2.5 py-1 text-[11px] text-muted-foreground">
-                  <span className="h-1.5 w-1.5 rounded-full bg-brand" /> Grátis
+                  <span className="h-1.5 w-1.5 rounded-full bg-brand" /> Gratuito
                 </div>
               </div>
 
@@ -129,7 +129,7 @@ function HomePage() {
                 {[
                   ["Primeiro passo", "Formulário"],
                   ["Formato", "Online"],
-                  ["Investimento", "Grátis"],
+                  ["Investimento", "Gratuito"],
                   ["Próximo passo", "WhatsApp"],
                 ].map(([label, value]) => (
                   <div
