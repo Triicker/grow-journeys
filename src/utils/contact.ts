@@ -15,19 +15,25 @@ export function hasConfiguredWhatsApp(): boolean {
 }
 
 export function formatLeadSubject(input: Pick<LeadRequest, "intent" | "fullName">): string {
-  const prefix = input.intent === "scheduling" ? "Solicitacao de agendamento" : "Contato pelo site";
+  const prefix =
+    input.intent === "scheduling"
+      ? "Solicitacao de aula experimental gratuita"
+      : "Contato pelo site";
   return `${prefix} - ${input.fullName}`;
 }
 
 export function formatLeadMessage(input: LeadMessageInput): string {
-  const intent = input.intent === "scheduling" ? "agendar uma aula" : "falar com a Nerya";
+  const intent =
+    input.intent === "scheduling"
+      ? "marcar uma aula experimental gratuita"
+      : "falar com a Nerya";
   return [
     `Ola, quero ${intent}.`,
     "",
     `Nome: ${input.fullName}`,
     `E-mail: ${input.email}`,
     input.whatsapp ? `WhatsApp: ${input.whatsapp}` : null,
-    input.preferredSchedule ? `Melhores horarios: ${input.preferredSchedule}` : null,
+    input.preferredSchedule ? `Disponibilidade: ${input.preferredSchedule}` : null,
     "",
     "Mensagem:",
     input.message,

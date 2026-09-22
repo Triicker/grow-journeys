@@ -1,14 +1,13 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import { type ReactNode, useEffect, useState } from "react";
-import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
-import { Menu, X } from "lucide-react";
+import { Instagram, Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const NAV = [
   { to: "/", label: "Início" },
   { to: "/planos", label: "Planos" },
-  { to: "/agendar", label: "Agendar aula" },
+  { to: "/agendar", label: "Aula experimental" },
   { to: "/como-funciona", label: "Como funciona" },
   { to: "/contato", label: "Contato" },
 ] as const;
@@ -24,7 +23,6 @@ function Logo({ className }: { className?: string }) {
 }
 
 export function PublicLayout({ children }: { children: ReactNode }) {
-  const { user, loading } = useAuth();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -71,21 +69,13 @@ export function PublicLayout({ children }: { children: ReactNode }) {
           </nav>
 
           <div className="hidden items-center gap-2 lg:flex">
-            {loading ? null : user ? (
-              <Button asChild size="sm" variant="secondary">
-                <Link to={user.role === "admin" ? "/" : "/aluno"}>
-                  {user.role === "admin" ? "Admin" : "Minha área"}
-                </Link>
-              </Button>
-            ) : (
-              <Button
-                asChild
-                size="sm"
-                className="bg-brand text-primary-foreground hover:bg-brand-dark"
-              >
-                <Link to="/agendar">Agendar aula</Link>
-              </Button>
-            )}
+            <Button
+              asChild
+              size="sm"
+              className="bg-brand text-primary-foreground hover:bg-brand-dark"
+            >
+              <Link to="/agendar">Aula experimental</Link>
+            </Button>
           </div>
 
           <button
@@ -112,19 +102,13 @@ export function PublicLayout({ children }: { children: ReactNode }) {
               </Link>
             ))}
             <div className="mt-2 flex gap-2">
-              {user ? (
-                <Button asChild size="sm" className="flex-1 bg-brand hover:bg-brand-dark">
-                  <Link to={user.role === "admin" ? "/" : "/aluno"}>Minha área</Link>
-                </Button>
-              ) : (
-                <Button
-                  asChild
-                  size="sm"
-                  className="flex-1 bg-brand text-primary-foreground hover:bg-brand-dark"
-                >
-                  <Link to="/agendar">Agendar aula</Link>
-                </Button>
-              )}
+              <Button
+                asChild
+                size="sm"
+                className="flex-1 bg-brand text-primary-foreground hover:bg-brand-dark"
+              >
+                <Link to="/agendar">Aula experimental</Link>
+              </Button>
             </div>
           </div>
         </div>
@@ -153,7 +137,7 @@ export function PublicLayout({ children }: { children: ReactNode }) {
               </li>
               <li>
                 <Link to="/agendar" className="transition hover:text-foreground">
-                  Agendar aula
+                  Aula experimental
                 </Link>
               </li>
             </ul>
@@ -180,17 +164,30 @@ export function PublicLayout({ children }: { children: ReactNode }) {
               Aviso
             </div>
             <p className="text-xs text-muted-foreground">
-              Nesta fase, solicitações de horário são enviadas por e-mail. Pagamentos e contas de
-              aluno ainda não são processados.
+              Sua aula experimental é grátis. Envie o formulário e combine os próximos passos pelo
+              WhatsApp.
             </p>
           </div>
         </div>
         <div className="border-t border-border">
           <div className="container-page flex flex-wrap items-center justify-between gap-3 py-5 text-xs text-muted-foreground">
             <span>© {new Date().getFullYear()} Nerya. Todos os direitos reservados.</span>
-            <span className="inline-flex items-center gap-1.5">
-              <span className="h-1.5 w-1.5 rounded-full bg-brand" /> Feito com foco em fluência.
-            </span>
+            <div className="flex items-center gap-4">
+              <span className="inline-flex items-center gap-1.5">
+                <span className="h-1.5 w-1.5 rounded-full bg-brand" /> Feito com foco em fluência.
+              </span>
+              <a
+                href="https://www.instagram.com/somosnerya/"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Instagram da Nerya"
+                title="Instagram @somosnerya"
+                className="inline-flex items-center gap-1.5 rounded-md px-2 py-1 text-muted-foreground transition-colors hover:bg-surface hover:text-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+              >
+                <Instagram className="h-4 w-4" aria-hidden="true" />
+                <span>@somosnerya</span>
+              </a>
+            </div>
           </div>
         </div>
       </footer>

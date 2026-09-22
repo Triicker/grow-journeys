@@ -1,19 +1,15 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
 import { PublicLayout } from "@/layouts/PublicLayout";
 import { LeadCaptureForm } from "@/components/LeadCaptureForm";
-import { SchedulingCalendar } from "@/components/SchedulingCalendar";
-import { formatDateLong } from "@/utils/format";
-import type { AvailabilitySlot } from "@/types";
 
 export const Route = createFileRoute("/agendar")({
   head: () => ({
     meta: [
-      { title: "Agendar aula — Nerya" },
+      { title: "Aula experimental — Nerya" },
       {
         name: "description",
         content:
-          "Escolha um horário no calendário e envie uma solicitação de aula particular de inglês.",
+          "Solicite sua aula experimental gratuita de inglês. Seus dados são enviados por e-mail e o atendimento continua no WhatsApp.",
       },
     ],
   }),
@@ -21,26 +17,16 @@ export const Route = createFileRoute("/agendar")({
 });
 
 function SchedulePublic() {
-  const [requestedSchedule, setRequestedSchedule] = useState("");
-
-  const requestSlot = (slot: AvailabilitySlot) => {
-    setRequestedSchedule(
-      `${formatDateLong(`${slot.date}T12:00:00`)} das ${slot.startTime} às ${slot.endTime}`,
-    );
-  };
-
   return (
     <PublicLayout>
-      <section className="container-page grid gap-8 py-10 md:py-14 lg:grid-cols-[0.86fr_1.14fr] lg:items-start">
-        <LeadCaptureForm
-          intent="scheduling"
-          title="Pedir um horário"
-          description="Escolha uma data e horário no calendário. Depois envie seus dados para confirmação por e-mail."
-          preferredSchedulePreset={requestedSchedule}
-          requirePreferredSchedule
-          hidePreferredScheduleInput
-        />
-        <SchedulingCalendar framed={false} publicLeadMode onRequestSlot={requestSlot} />
+      <section className="container-page py-12 md:py-16">
+        <div className="mx-auto max-w-2xl">
+          <LeadCaptureForm
+            intent="scheduling"
+            title="Marque sua aula experimental grátis"
+            description="Conte um pouco sobre você. Ao enviar, seus dados chegam automaticamente por e-mail e o WhatsApp é aberto para combinar sua aula gratuita."
+          />
+        </div>
       </section>
     </PublicLayout>
   );

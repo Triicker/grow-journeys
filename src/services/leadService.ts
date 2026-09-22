@@ -67,34 +67,56 @@ export const leadService = {
       createdAt: now,
     };
 
-    if (lead.preferredChannel === "whatsapp") {
-      const whatsappUrl = buildWhatsAppUrl(lead);
-      if (!whatsappUrl) {
-        throw new Error("Configure VITE_PUBLIC_WHATSAPP_NUMBER para usar WhatsApp Web.");
+    const whatsappUrl =
+      lead.preferredChannel === "whatsapp" ? buildWhatsAppUrl(lead) : null;
+    if (lead.preferredChannel === "whatsapp" && !whatsappUrl) {
+      throw new Error("Configure VITE_PUBLIC_WHATSAPP_NUMBER para usar o WhatsApp.");
+    }
+
+    if (env.leadsDataSource === "api") {
+      const submission = submitLeadToApi({
+        ...lead,
+        website: input.website,
+        renderedAt: input.renderedAt,
+      });
+
+      if (whatsappUrl) {
+        window.open(whatsappUrl, "_blank", "noopener,noreferrer");
       }
-      saveLocalLead(lead);
+
+      const response = await submission;
+
+      if (whatsappUrl) {
+        return {
+          data: {
+            ...response.data,
+            status: "redirected",
+            message:
+              "Solicitação enviada por e-mail. Abrimos o WhatsApp com sua mensagem preenchida para você continuar.",
+            whatsappUrl,
+          },
+        };
+      }
+
+      return response;
+    }
+
+    saveLocalLead(lead);
+
+    if (whatsappUrl) {
       window.open(whatsappUrl, "_blank", "noopener,noreferrer");
       return {
         data: {
           id: lead.id,
           status: "redirected",
           provider: "whatsapp-web",
-          message: "Abrimos o WhatsApp Web com sua mensagem preenchida. Revise e envie por la.",
+          message: "Abrimos o WhatsApp com sua mensagem preenchida. Revise e envie por lá.",
           whatsappUrl,
           createdAt: now,
         },
       };
     }
 
-    if (env.leadsDataSource === "api") {
-      return submitLeadToApi({
-        ...lead,
-        website: input.website,
-        renderedAt: input.renderedAt,
-      });
-    }
-
-    saveLocalLead(lead);
     return {
       data: {
         id: lead.id,

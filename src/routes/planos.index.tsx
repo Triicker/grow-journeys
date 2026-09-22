@@ -5,7 +5,7 @@ import { planRepository } from "@/repositories";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useState } from "react";
-import { ArrowRight, Check, Loader2, Sparkles } from "lucide-react";
+import { Check, Loader2, Sparkles } from "lucide-react";
 import { formatPriceBRL } from "@/utils/format";
 import { DemoBanner } from "@/components/DemoBanner";
 import { EmptyState, ErrorState, LoadingBlock } from "@/components/States";
@@ -17,7 +17,11 @@ export const Route = createFileRoute("/planos/")({
   head: () => ({
     meta: [
       { title: "Planos — Nerya" },
-      { name: "description", content: "Escolha uma frequência de aulas particulares de inglês." },
+      {
+        name: "description",
+        content:
+          "Conheça os planos de inglês da Nerya e marque uma aula experimental gratuita.",
+      },
     ],
   }),
   component: Plans,
@@ -51,7 +55,7 @@ function Plans() {
     },
     onSuccess: (plan) => {
       toast.info(
-        `Plano ${plan.name} selecionado. Envie seu melhor horário para confirmarmos por e-mail.`,
+        `Plano ${plan.name} selecionado. Marque sua aula experimental grátis para conversar sobre os próximos passos.`,
       );
       navigate({ to: "/agendar" });
     },
@@ -74,14 +78,15 @@ function Plans() {
               Escolha sua frequência.
             </h1>
             <p className="mx-auto mt-4 max-w-2xl text-sm leading-relaxed text-plan-muted md:text-base">
-              Aulas particulares ao vivo com valores calculados por hora-aula e confirmação inicial
-              por e-mail.
+              Conheça as opções de frequência e comece com uma aula experimental gratuita e ao
+              vivo.
             </p>
           </div>
 
           <div className="mx-auto mt-7 max-w-3xl">
             <DemoBanner>
-              Sem pagamento online nesta fase. Solicite o horário e confirme por e-mail.
+              A aula experimental é grátis. Os preços abaixo valem para as aulas contratadas depois
+              dela; valores, horários e contratação são combinados no WhatsApp.
             </DemoBanner>
           </div>
 
@@ -202,12 +207,12 @@ function Plans() {
                     <Button
                       type="button"
                       className={cn(
-                        "mt-6 min-h-11 w-full bg-plan-primary text-primary-foreground hover:bg-plan-primary-dark",
+                        "mt-6 min-h-11 w-full whitespace-normal bg-plan-primary px-3 text-center text-xs leading-tight text-primary-foreground hover:bg-plan-primary-dark",
                         plan.featured && "bg-plan-primary-dark hover:bg-plan-primary",
                       )}
                       disabled={disabled}
                       onClick={() => choosePlan.mutate(plan)}
-                      aria-label={`Escolher plano ${plan.name}, ${priceAria}`}
+                      aria-label={`Marcar aula experimental grátis após conhecer o plano ${plan.name}, ${priceAria}`}
                     >
                       {isChoosing ? (
                         <>
@@ -215,10 +220,7 @@ function Plans() {
                           Selecionando
                         </>
                       ) : (
-                        <>
-                          Solicitar horário{" "}
-                          <ArrowRight className="ml-2 h-4 w-4" aria-hidden="true" />
-                        </>
+                        "Quero uma aula grátis"
                       )}
                     </Button>
                   </article>

@@ -1,32 +1,26 @@
-import { useEffect, useState, type FormEvent } from "react";
-import { Mail, MessageCircle } from "lucide-react";
+import { useState, type FormEvent } from "react";
+import { MessageCircle } from "lucide-react";
 import { toast } from "sonner";
 import { env } from "@/config/env";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Textarea } from "@/components/ui/textarea";
 import { DemoBanner } from "@/components/DemoBanner";
 import { leadService } from "@/services/leadService";
 import { hasConfiguredWhatsApp } from "@/utils/contact";
-import type { LeadIntent, LeadPreferredChannel } from "@/types";
+import type { LeadIntent } from "@/types";
 
 type LeadCaptureFormProps = {
   intent: LeadIntent;
   title?: string;
   description?: string;
-  preferredSchedulePreset?: string;
-  requirePreferredSchedule?: boolean;
-  hidePreferredScheduleInput?: boolean;
 };
 
 type LeadFormState = {
   fullName: string;
   email: string;
   whatsapp: string;
-  preferredChannel: LeadPreferredChannel;
-  preferredSchedule: string;
   message: string;
   website: string;
 };
@@ -35,49 +29,30 @@ const emptyForm: LeadFormState = {
   fullName: "",
   email: "",
   whatsapp: "",
-  preferredChannel: "email",
-  preferredSchedule: "",
   message: "",
   website: "",
 };
 
 function defaultTitle(intent: LeadIntent): string {
-  return intent === "scheduling" ? "Solicitar agendamento" : "Enviar mensagem";
+  return intent === "scheduling" ? "Marcar aula experimental grátis" : "Enviar mensagem";
 }
 
 function defaultDescription(intent: LeadIntent): string {
   return intent === "scheduling"
-    ? "Conte seus objetivos e melhores horários. A resposta pode chegar por e-mail ou pelo WhatsApp Web."
-    : "Envie sua dúvida sobre planos, horários ou objetivos de inglês.";
+    ? "Conte seu objetivo com o inglês e solicite sua aula experimental grátis."
+    : "Envie sua dúvida sobre planos, aulas ou seus objetivos de inglês.";
 }
 
 export function LeadCaptureForm({
   intent,
   title,
   description,
-  preferredSchedulePreset,
-  requirePreferredSchedule = false,
-  hidePreferredScheduleInput = false,
 }: LeadCaptureFormProps) {
   const [form, setForm] = useState<LeadFormState>(emptyForm);
   const [renderedAt, setRenderedAt] = useState(() => new Date().toISOString());
   const [loading, setLoading] = useState(false);
   const whatsappReady = hasConfiguredWhatsApp();
   const isMock = env.leadsDataSource === "mock";
-  const needsSchedule = intent === "scheduling" && requirePreferredSchedule;
-  const missingSchedule = needsSchedule && form.preferredSchedule.trim().length === 0;
-
-  useEffect(() => {
-    if (!preferredSchedulePreset) return;
-    setForm((current) => ({
-      ...current,
-      preferredSchedule: preferredSchedulePreset,
-      message:
-        current.message.trim().length > 0
-          ? current.message
-          : `Gostaria de solicitar uma aula neste horário: ${preferredSchedulePreset}.`,
-    }));
-  }, [preferredSchedulePreset]);
 
   const update = <K extends keyof LeadFormState>(key: K, value: LeadFormState[K]) => {
     setForm((current) => ({ ...current, [key]: value }));
@@ -86,10 +61,6 @@ export function LeadCaptureForm({
   const submit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (loading) return;
-    if (missingSchedule) {
-      toast.info("Escolha uma data e um horário no calendário.");
-      return;
-    }
     setLoading(true);
     try {
       const response = await leadService.submit({
@@ -97,8 +68,7 @@ export function LeadCaptureForm({
         fullName: form.fullName,
         email: form.email,
         whatsapp: form.whatsapp,
-        preferredChannel: form.preferredChannel,
-        preferredSchedule: form.preferredSchedule,
+        preferredChannel: "whatsapp",
         message: form.message,
         website: form.website,
         renderedAt,
@@ -120,7 +90,7 @@ export function LeadCaptureForm({
     >
       <div>
         <p className="text-xs uppercase tracking-widest text-primary">
-          {intent === "scheduling" ? "Agendamento" : "Contato"}
+          {intent === "scheduling" ? "Aula experimental" : "Contato"}
         </p>
         <h2 className="mt-2 font-display text-3xl">{title ?? defaultTitle(intent)}</h2>
         <p className="mt-2 text-sm text-muted-foreground">
@@ -130,8 +100,7 @@ export function LeadCaptureForm({
 
       {isMock && (
         <DemoBanner>
-          Modo mock: e-mails ficam apenas registrados localmente. Em API, o envio deve sair pelo
-          backend com Resend.
+          Modo de demonstração: a solicitação fica registrada apenas neste navegador.
         </DemoBanner>
       )}
 
@@ -169,68 +138,17 @@ export function LeadCaptureForm({
         </div>
       </div>
 
-      <div className={`grid gap-4 ${hidePreferredScheduleInput ? "" : "sm:grid-cols-2"}`}>
-        <div>
-          <Label htmlFor={`${intent}-whatsapp`}>WhatsApp</Label>
-          <Input
-            id={`${intent}-whatsapp`}
-            inputMode="tel"
-            placeholder="(11) 99999-9999"
-            value={form.whatsapp}
-            onChange={(event) => update("whatsapp", event.target.value)}
-          />
-        </div>
-        {!hidePreferredScheduleInput && (
-          <div>
-            <Label htmlFor={`${intent}-schedule`}>Melhores horários</Label>
-            <Input
-              id={`${intent}-schedule`}
-              placeholder="Ex.: terças à noite"
-              value={form.preferredSchedule}
-              onChange={(event) => update("preferredSchedule", event.target.value)}
-            />
-          </div>
-        )}
-      </div>
-
-      {hidePreferredScheduleInput && (
-        <div className="rounded-md border border-border/60 bg-background/40 px-3 py-3">
-          <div className="text-xs font-medium uppercase tracking-widest text-muted-foreground">
-            Horário escolhido
-          </div>
-          <div className="mt-1 text-sm font-medium text-foreground">
-            {form.preferredSchedule || "Escolha uma data e um horário no calendário."}
-          </div>
-        </div>
-      )}
-
       <div>
-        <Label>Preferência de resposta</Label>
-        <RadioGroup
-          value={form.preferredChannel}
-          onValueChange={(value) => update("preferredChannel", value as LeadPreferredChannel)}
-          className="mt-2 grid gap-2 sm:grid-cols-2"
-        >
-          <label className="flex min-h-12 cursor-pointer items-center gap-3 rounded-md border border-border/60 bg-background/40 px-3 py-2 text-sm">
-            <RadioGroupItem value="email" id={`${intent}-channel-email`} />
-            <Mail className="h-4 w-4 text-primary" aria-hidden="true" />
-            <span>E-mail</span>
-          </label>
-          <label className="flex min-h-12 cursor-pointer items-center gap-3 rounded-md border border-border/60 bg-background/40 px-3 py-2 text-sm data-disabled:opacity-50">
-            <RadioGroupItem
-              value="whatsapp"
-              id={`${intent}-channel-whatsapp`}
-              disabled={!whatsappReady}
-            />
-            <MessageCircle className="h-4 w-4 text-primary" aria-hidden="true" />
-            <span>WhatsApp Web</span>
-          </label>
-        </RadioGroup>
-        {!whatsappReady && (
-          <p className="mt-2 text-xs text-muted-foreground">
-            WhatsApp Web sera habilitado quando o numero de atendimento estiver configurado.
-          </p>
-        )}
+        <Label htmlFor={`${intent}-whatsapp`}>WhatsApp</Label>
+        <Input
+          id={`${intent}-whatsapp`}
+          inputMode="tel"
+          autoComplete="tel"
+          placeholder="(DDD) 99999-9999"
+          required
+          value={form.whatsapp}
+          onChange={(event) => update("whatsapp", event.target.value)}
+        />
       </div>
 
       <div>
@@ -241,7 +159,7 @@ export function LeadCaptureForm({
           required
           placeholder={
             intent === "scheduling"
-              ? "Conte seu nível e objetivo."
+              ? "Conte seu nível de inglês e o que você quer alcançar."
               : "Escreva sua dúvida ou objetivo."
           }
           value={form.message}
@@ -251,17 +169,25 @@ export function LeadCaptureForm({
 
       <Button
         type="submit"
-        disabled={loading || missingSchedule}
+        disabled={loading || !whatsappReady}
         className="w-full bg-brand text-primary-foreground hover:bg-brand-dark"
       >
-        {loading
-          ? "Enviando..."
-          : missingSchedule
-            ? "Escolha um horário no calendário"
-            : form.preferredChannel === "whatsapp"
-              ? "Abrir WhatsApp Web"
-              : "Enviar por e-mail"}
+        {loading ? (
+          "Enviando..."
+        ) : (
+          <>
+            <MessageCircle className="h-4 w-4" aria-hidden="true" />
+            Enviar e continuar no WhatsApp
+          </>
+        )}
       </Button>
+      <p className="text-center text-xs leading-relaxed text-muted-foreground">
+        {whatsappReady
+          ? intent === "scheduling"
+            ? "Sua aula experimental é grátis. Ao clicar, seus dados são enviados por e-mail e o WhatsApp é aberto para combinar os detalhes."
+            : "Ao clicar, sua mensagem é enviada por e-mail e o WhatsApp é aberto para continuar o atendimento."
+          : "O envio será habilitado assim que o número de atendimento do WhatsApp estiver configurado."}
+      </p>
     </form>
   );
 }

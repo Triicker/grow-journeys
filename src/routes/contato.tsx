@@ -9,7 +9,8 @@ export const Route = createFileRoute("/contato")({
       { title: "Contato — Nerya" },
       {
         name: "description",
-        content: "Fale com a Nerya sobre planos, horários e aulas particulares de inglês.",
+        content:
+          "Fale com a Nerya sobre aulas e planos. Envie sua mensagem por e-mail e continue pelo WhatsApp.",
       },
     ],
   }),
@@ -24,14 +25,18 @@ function Contact() {
           <p className="text-xs uppercase tracking-widest text-primary">Contato</p>
           <h1 className="mt-2 font-display text-5xl leading-tight">Fale com a gente.</h1>
           <p className="mt-4 text-muted-foreground">
-            Dúvidas sobre planos, horários ou objetivos de inglês. Respondemos em até 2 dias úteis.
+            Dúvidas sobre planos, aulas ou seus objetivos de inglês. Sua mensagem é enviada por
+            e-mail e o atendimento continua no WhatsApp.
           </p>
           <div className="mt-6 space-y-1 text-sm text-muted-foreground">
             <div>{env.publicContactEmail}</div>
-            <div>São Paulo — Brasil</div>
+            <div>Bahia — Brasil</div>
           </div>
         </div>
-        <LeadCaptureForm intent="contact" />
+        <LeadCaptureForm
+          intent="contact"
+          description="Ao enviar, sua mensagem chega automaticamente por e-mail e o WhatsApp é aberto para continuar o atendimento."
+        />
       </section>
     </PublicLayout>
   );

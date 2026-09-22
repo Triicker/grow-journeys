@@ -3,9 +3,8 @@ import { PublicLayout } from "@/layouts/PublicLayout";
 import { Button } from "@/components/ui/button";
 import {
   ArrowRight,
-  CalendarDays,
   CheckCircle2,
-  Clock3,
+  MailCheck,
   MessageCircle,
   Sparkles,
   UserRoundCheck,
@@ -18,7 +17,7 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "Aulas particulares de inglês ao vivo com acompanhamento individual, planos por frequência e solicitação de horário online.",
+          "Conheça as aulas particulares de inglês da Nerya e marque uma aula experimental gratuita.",
       },
     ],
   }),
@@ -33,7 +32,7 @@ const FOCUS = [
   },
   { icon: Sparkles, title: "Pronúncia", text: "Correções pontuais para melhorar clareza e ritmo." },
   {
-    icon: CalendarDays,
+    icon: MailCheck,
     title: "Viagens",
     text: "Situações reais para aeroporto, hotel, passeios e restaurantes.",
   },
@@ -78,7 +77,7 @@ function HomePage() {
                 className="bg-brand text-primary-foreground hover:bg-brand-dark"
               >
                 <Link to="/agendar">
-                  Agendar aula <ArrowRight className="ml-2 h-4 w-4" />
+                  Marcar aula grátis <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>
               </Button>
               <Button
@@ -95,10 +94,10 @@ function HomePage() {
                 <CheckCircle2 className="h-4 w-4 text-brand-light" /> Professor único
               </li>
               <li className="inline-flex items-center gap-2">
-                <CalendarDays className="h-4 w-4 text-brand-light" /> Solicitação por e-mail
+                <MailCheck className="h-4 w-4 text-brand-light" /> Confirmação automática por e-mail
               </li>
               <li className="inline-flex items-center gap-2">
-                <Clock3 className="h-4 w-4 text-brand-light" /> Horários reservados
+                <MessageCircle className="h-4 w-4 text-brand-light" /> Atendimento pelo WhatsApp
               </li>
             </ul>
           </div>
@@ -108,29 +107,30 @@ function HomePage() {
             <div className="relative flex h-full flex-col justify-between rounded-2xl p-8">
               <div className="flex items-center justify-between">
                 <div className="text-xs uppercase tracking-widest text-muted-foreground">
-                  Solicitação de aula
+                  Aula experimental
                 </div>
                 <div className="inline-flex items-center gap-2 rounded-full bg-surface-2 px-2.5 py-1 text-[11px] text-muted-foreground">
-                  <span className="h-1.5 w-1.5 rounded-full bg-brand" /> Por e-mail
+                  <span className="h-1.5 w-1.5 rounded-full bg-brand" /> Grátis
                 </div>
               </div>
 
               <div className="my-8">
                 <p className="font-display text-4xl leading-tight text-foreground md:text-5xl">
-                  Escolha seu <span className="text-brand-light">horário</span>
+                  Descubra seu <span className="text-brand-light">inglês</span>
                   <br />
-                  online.
+                  na prática.
                 </p>
                 <p className="mt-4 text-sm text-muted-foreground">
-                  Escolha um horário disponível e receba a confirmação direto no seu e-mail.
+                  Preencha o formulário. Seus dados seguem por e-mail e o WhatsApp abre em seguida.
                 </p>
               </div>
 
               <div className="grid gap-3">
                 {[
-                  ["Data e horário", "Você escolhe"],
+                  ["Primeiro passo", "Formulário"],
                   ["Formato", "Online"],
-                  ["Confirmação", "Por e-mail"],
+                  ["Investimento", "Grátis"],
+                  ["Próximo passo", "WhatsApp"],
                 ].map(([label, value]) => (
                   <div
                     key={label}
@@ -175,8 +175,8 @@ function HomePage() {
             Uma rotina de inglês que cabe na <span className="text-brand-light">sua semana.</span>
           </h2>
           <p className="mt-4 text-muted-foreground">
-            Você escolhe uma frequência, solicita um horário disponível e recebe a confirmação por
-            e-mail.
+            Comece com uma aula experimental grátis, conheça a dinâmica e converse com a gente
+            sobre a frequência ideal para você.
           </p>
         </div>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -199,15 +199,15 @@ function HomePage() {
               Como funciona
             </p>
             <h2 className="mt-3 text-foreground">
-              Plano, horário escolhido e confirmação sem complicar.
+              Sua aula experimental grátis, sem complicação.
             </h2>
           </div>
           <ol className="grid gap-4 text-sm text-muted-foreground">
             {[
-              "Escolha a frequência ideal para seu momento.",
-              "Escolha um horário disponível e envie sua solicitação.",
-              "Participe das aulas ao vivo com foco no seu objetivo.",
-              "Receba a confirmação por e-mail e combine os próximos passos.",
+              "Preencha o formulário com seus dados e objetivo.",
+              "Receba a confirmação automática por e-mail.",
+              "Continue automaticamente no WhatsApp.",
+              "Combine sua aula experimental gratuita e conheça a experiência Nerya.",
             ].map((item, index) => (
               <li key={item} className="flex gap-4 rounded-lg border border-border/60 bg-card p-4">
                 <span className="font-display text-2xl text-brand-light">{index + 1}</span>
@@ -223,11 +223,11 @@ function HomePage() {
           Bora começar?
         </p>
         <h2 className="mx-auto mt-3 max-w-3xl text-foreground">
-          Reserve um horário e transforme estudo em conversa.
+          Marque sua aula experimental grátis e transforme estudo em conversa.
         </h2>
         <p className="mx-auto mt-4 max-w-lg text-muted-foreground">
-          Nesta fase, o site recebe pedidos de aula por e-mail sem exigir cadastro ou banco de
-          dados.
+          Você não precisa escolher data ou horário agora. Envie seus dados e combine os detalhes
+          diretamente no atendimento.
         </p>
         <div className="mt-8 flex flex-wrap justify-center gap-3">
           <Button
@@ -235,7 +235,7 @@ function HomePage() {
             size="lg"
             className="bg-brand text-primary-foreground hover:bg-brand-dark"
           >
-            <Link to="/agendar">Agendar aula</Link>
+            <Link to="/agendar">Marcar aula grátis</Link>
           </Button>
           <Button
             asChild
