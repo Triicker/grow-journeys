@@ -79,9 +79,17 @@ describe("leadService", () => {
     expect(settled).toBe(true);
   });
 
-  it("keeps WhatsApp as a manual send flow", async () => {
+  it("starts the email submission and opens WhatsApp from the same action", async () => {
     const open = vi.fn();
     const storage = localStorageStub();
+    let resolveFetch: (response: Response) => void = () => {};
+    const fetch = vi.fn(
+      () =>
+        new Promise<Response>((resolve) => {
+          resolveFetch = resolve;
+        }),
+    );
+    vi.stubGlobal("fetch", fetch);
     vi.stubGlobal("window", {
       location: { href: "https://nerya.example/agendar" },
       open,
@@ -90,26 +98,37 @@ describe("leadService", () => {
 
     const { leadService } = await importLeadService({
       VITE_LEADS_DATA_SOURCE: "api",
+      VITE_API_BASE_URL: "/api",
       VITE_PUBLIC_WHATSAPP_NUMBER: "5511999999999",
     });
 
-    const response = await leadService.submit({
+    const submission = leadService.submit({
       intent: "scheduling",
       fullName: "Guilherme Nery",
       email: "guilherme@example.com",
       whatsapp: "(11) 99999-9999",
       preferredChannel: "whatsapp",
-      preferredSchedule: "tercas a noite",
-      message: "Quero agendar uma aula.",
+      message: "Quero fazer uma aula experimental.",
     });
 
+    await Promise.resolve();
+    expect(fetch).toHaveBeenCalledTimes(1);
     expect(open).toHaveBeenCalledWith(
       expect.stringContaining("https://wa.me/5511999999999"),
       "_blank",
       "noopener,noreferrer",
     );
-    expect(response.data.provider).toBe("whatsapp-web");
-    expect(response.data.message.toLowerCase()).toContain("revise e envie");
-    expect(response.data.message.toLowerCase()).not.toContain("enviada automaticamente");
+
+    resolveFetch(
+      new Response(JSON.stringify(successResponse), {
+        status: 201,
+        headers: { "content-type": "application/json" },
+      }),
+    );
+    const response = await submission;
+
+    expect(response.data.provider).toBe("backend");
+    expect(response.data.message.toLowerCase()).toContain("enviada por e-mail");
+    expect(response.data.message.toLowerCase()).toContain("whatsapp");
   });
 });

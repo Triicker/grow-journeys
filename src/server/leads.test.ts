@@ -74,6 +74,31 @@ describe("handleLeadRequest", () => {
     expect(confirmation.subject).toBe("Recebemos sua solicitação - Nerya");
   });
 
+  it("sends an experimental-class request without requiring schedule data", async () => {
+    const emailProvider = provider();
+
+    const response = await handleLeadRequest(
+      request(
+        validPayload({
+          intent: "scheduling",
+          preferredChannel: "whatsapp",
+          preferredSchedule: undefined,
+          message: "Quero fazer uma aula experimental.",
+        }),
+      ),
+      env,
+      {
+        emailProvider,
+        now: () => new Date("2026-08-05T20:00:03.000Z"),
+      },
+    );
+
+    expect(response.status).toBe(201);
+    const [leadEmail] = emailProvider.send.mock.calls[0]!;
+    expect(leadEmail.subject).toBe("Nerya - Aula experimental gratuita pelo site");
+    expect(leadEmail.text).not.toContain("Disponibilidade:");
+  });
+
   it("rejects an invalid email", async () => {
     const emailProvider = provider();
     const response = await handleLeadRequest(request(validPayload({ email: "invalid" })), env, {

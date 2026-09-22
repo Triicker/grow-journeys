@@ -172,7 +172,9 @@ export async function handleLeadRequest(
 
   return json(
     successResult(
-      "Solicitacao enviada com sucesso. Responderemos pelo canal escolhido.",
+      lead.preferredChannel === "whatsapp"
+        ? "Solicitacao enviada por e-mail. Continue o atendimento pelo WhatsApp."
+        : "Solicitacao enviada com sucesso. Responderemos por e-mail.",
       createdAt,
     ),
     201,
@@ -244,7 +246,7 @@ function buildLeadEmail(
   html: string;
   text: string;
 } {
-  const intentLabel = lead.intent === "scheduling" ? "Agendamento" : "Contato";
+  const intentLabel = lead.intent === "scheduling" ? "Aula experimental gratuita" : "Contato";
   const channelLabel = lead.preferredChannel === "whatsapp" ? "WhatsApp" : "E-mail";
   const subject = `Nerya - ${intentLabel} pelo site`;
   const logoUrl = `${siteOrigin}/logoo.png`;
@@ -253,11 +255,13 @@ function buildLeadEmail(
     ["Nome", lead.fullName],
     ["E-mail", lead.email],
     ["WhatsApp", lead.whatsapp ?? "Nao informado"],
-    ["Canal preferido", channelLabel],
-    ["Horario preferido", lead.preferredSchedule ?? "Nao informado"],
+    ["Continuação do atendimento", channelLabel],
     ["Pagina de origem", lead.origin ?? "Nao informada"],
-    ["Data e horario", createdAt],
+    ["Recebido em", createdAt],
   ];
+  if (lead.preferredSchedule) {
+    rows.splice(5, 0, ["Disponibilidade", lead.preferredSchedule]);
+  }
 
   const htmlRows = rows
     .map(
@@ -300,11 +304,22 @@ function buildConfirmationEmail(
   html: string;
   text: string;
 } {
-  const intentLabel = lead.intent === "scheduling" ? "solicitação de agendamento" : "mensagem";
-  const schedule = lead.preferredSchedule ?? "horário a combinar";
+  const intentLabel =
+    lead.intent === "scheduling" ? "solicitação de aula experimental gratuita" : "mensagem";
   const logoUrl = `${siteOrigin}/logoo.png`;
   const escapedName = escapeHtml(lead.fullName);
-  const escapedSchedule = escapeHtml(schedule);
+  const responseSentence =
+    lead.preferredChannel === "whatsapp"
+      ? "Seus dados foram enviados por e-mail e o atendimento continua pelo WhatsApp."
+      : "Seus dados foram enviados e responderemos por e-mail.";
+  const scheduleBlock = lead.preferredSchedule
+    ? [
+        '<div style="margin:22px 0;padding:16px;border:1px solid #e5e7eb;border-radius:10px;background:#f9fafb">',
+        '<p style="margin:0 0 6px;color:#6b7280;font-size:12px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase">Disponibilidade informada</p>',
+        `<p style="margin:0;color:#111827;font-size:16px">${escapeHtml(lead.preferredSchedule)}</p>`,
+        "</div>",
+      ].join("")
+    : "";
 
   return {
     subject: "Recebemos sua solicitação - Nerya",
@@ -317,11 +332,8 @@ function buildConfirmationEmail(
       '<div style="padding:28px 24px">',
       '<p style="margin:0 0 8px;color:#536184;font-size:12px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase">Solicitação recebida</p>',
       `<h1 style="margin:0 0 16px;font-size:28px;line-height:1.15;color:#111827">Obrigado, ${escapedName}.</h1>`,
-      `<p style="margin:0 0 16px;color:#374151">Recebemos sua ${intentLabel} e vamos responder em breve pelo canal escolhido.</p>`,
-      '<div style="margin:22px 0;padding:16px;border:1px solid #e5e7eb;border-radius:10px;background:#f9fafb">',
-      '<p style="margin:0 0 6px;color:#6b7280;font-size:12px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase">Horário informado</p>',
-      `<p style="margin:0;color:#111827;font-size:16px">${escapedSchedule}</p>`,
-      "</div>",
+      `<p style="margin:0 0 16px;color:#374151">Recebemos sua ${intentLabel}. ${responseSentence}</p>`,
+      scheduleBlock,
       '<p style="margin:0;color:#374151">Se quiser acrescentar alguma informação, responda diretamente este e-mail.</p>',
       "</div>",
       "</div>",
@@ -331,8 +343,8 @@ function buildConfirmationEmail(
       "Recebemos sua solicitação - Nerya",
       "",
       `Obrigado, ${lead.fullName}.`,
-      `Recebemos sua ${intentLabel} e vamos responder em breve pelo canal escolhido.`,
-      `Horario informado: ${schedule}`,
+      `Recebemos sua ${intentLabel}. ${responseSentence}`,
+      lead.preferredSchedule ? `Disponibilidade informada: ${lead.preferredSchedule}` : "",
       "",
       "Se quiser acrescentar alguma informação, responda diretamente este e-mail.",
     ].join("\n"),

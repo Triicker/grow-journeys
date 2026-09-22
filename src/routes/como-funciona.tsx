@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { PublicLayout } from "@/layouts/PublicLayout";
 import { Button } from "@/components/ui/button";
-import { CalendarDays, CheckCircle2, Clock3, MailCheck, MessageCircle } from "lucide-react";
+import { CheckCircle2, ClipboardList, MailCheck, MessageCircle, Sparkles } from "lucide-react";
 
 export const Route = createFileRoute("/como-funciona")({
   head: () => ({
@@ -10,7 +10,7 @@ export const Route = createFileRoute("/como-funciona")({
       {
         name: "description",
         content:
-          "Entenda como funcionam os planos, a solicitação de horário e as aulas particulares na Nerya.",
+          "Entenda como solicitar uma aula experimental gratuita e conhecer as aulas particulares da Nerya.",
       },
     ],
   }),
@@ -19,24 +19,24 @@ export const Route = createFileRoute("/como-funciona")({
 
 const STEPS = [
   {
-    icon: Clock3,
-    title: "Escolha uma frequência",
-    text: "Os planos mostram quantas aulas cabem na sua rotina e o valor mensal estimado.",
-  },
-  {
-    icon: CalendarDays,
-    title: "Escolha um horário",
-    text: "Consulte a disponibilidade e envie uma solicitação pelo formulário.",
+    icon: ClipboardList,
+    title: "Preencha o formulário",
+    text: "Conte seu nível de inglês, seu objetivo e informe seus dados de contato.",
   },
   {
     icon: MailCheck,
-    title: "Confirme por e-mail",
-    text: "Você recebe o retorno com a confirmação do horário e próximos passos.",
+    title: "Receba a confirmação",
+    text: "A solicitação chega para a Nerya e você recebe uma confirmação automática por e-mail.",
   },
   {
     icon: MessageCircle,
-    title: "Participe da aula",
-    text: "A aula acontece ao vivo, com foco em conversação, pronúncia e seus objetivos.",
+    title: "Continue o atendimento",
+    text: "Depois do envio por e-mail, uma conversa pronta é aberta no WhatsApp para combinar os detalhes.",
+  },
+  {
+    icon: Sparkles,
+    title: "Faça a aula grátis",
+    text: "Conheça a dinâmica ao vivo sem custo, com foco em conversação, pronúncia e seus objetivos.",
   },
 ];
 
@@ -51,8 +51,8 @@ function HowItWorks() {
           COM <span className="text-lilac">ROTINA CLARA</span>.
         </h1>
         <p className="mt-8 max-w-3xl text-lg text-muted-foreground">
-          A Nerya organiza a experiência inicial de aulas particulares: você escolhe uma frequência,
-          solicita um horário e recebe a confirmação por e-mail.
+          A experiência começa com uma aula experimental gratuita. Você envia seus dados por e-mail
+          e o WhatsApp é aberto para combinar os detalhes diretamente com a Nerya.
         </p>
 
         <div className="mt-14 grid gap-4 md:grid-cols-2">
@@ -76,7 +76,7 @@ function HowItWorks() {
               "Foco em conversação e segurança para falar.",
               "Correção de pronúncia durante a prática.",
               "Temas alinhados a viagens, trabalho e rotina.",
-              "Combinação clara de frequência, horário e objetivo.",
+              "Próximos passos combinados diretamente no atendimento.",
             ].map((item) => (
               <li key={item} className="flex gap-2">
                 <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-primary" /> {item}
@@ -87,7 +87,7 @@ function HowItWorks() {
 
         <div className="mt-10 flex flex-wrap gap-3">
           <Button asChild>
-            <Link to="/agendar">Agendar aula</Link>
+            <Link to="/agendar">Marcar aula grátis</Link>
           </Button>
           <Button asChild variant="secondary">
             <Link to="/planos">Ver planos</Link>

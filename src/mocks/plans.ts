@@ -6,7 +6,7 @@ export const mockPlans: Plan[] = [
     name: "Aula avulsa",
     slug: "aula-avulsa",
     description:
-      "Uma aula individual para experimentar a metodologia ou trabalhar uma necessidade pontual.",
+      "Uma aula individual paga para trabalhar uma necessidade pontual após a experimental grátis.",
     lessonsPerWeek: 0,
     lessonsPerMonth: 1,
     monthlyPriceCents: 3490,
