@@ -1,6 +1,11 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { PublicLayout } from "@/layouts/PublicLayout";
 import { Button } from "@/components/ui/button";
+import { FaqSection } from "@/components/marketing/FaqSection";
+import { TeacherSection } from "@/components/marketing/TeacherSection";
+import { TestimonialsSection } from "@/components/marketing/TestimonialsSection";
+import { siteConfig } from "@/config/site";
+import { trackEvent } from "@/lib/analytics";
 import {
   ArrowRight,
   CheckCircle2,
@@ -17,9 +22,17 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "Conheça as aulas particulares de inglês da Nerya e marque uma aula experimental gratuita.",
+          "Aulas individuais de inglês ao vivo, com o mesmo professor, plano personalizado e prática de conversação, pronúncia e vocabulário.",
       },
+      { property: "og:title", content: "Nerya | Aulas particulares de inglês" },
+      {
+        property: "og:description",
+        content:
+          "Aulas individuais ao vivo, acompanhamento do mesmo professor e evolução personalizada.",
+      },
+      { property: "og:url", content: `${siteConfig.url}/` },
     ],
+    links: [{ rel: "canonical", href: `${siteConfig.url}/` }],
   }),
   component: HomePage,
 });
@@ -67,8 +80,8 @@ function HomePage() {
               Fluência que <span className="text-brand">transforma.</span>
             </h1>
             <p className="mt-6 max-w-lg text-base leading-relaxed text-muted-foreground md:text-lg">
-              Aprenda inglês em aulas individuais com um professor, agenda flexível e acompanhamento
-              da sua frequência a cada ciclo.
+              Aulas individuais ao vivo, com o mesmo professor acompanhando sua evolução em
+              conversação, pronúncia e vocabulário — no seu ritmo e com flexibilidade.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
               <Button
@@ -76,7 +89,10 @@ function HomePage() {
                 size="lg"
                 className="bg-brand text-primary-foreground hover:bg-brand-dark"
               >
-                <Link to="/agendar">
+                <Link
+                  to="/agendar"
+                  onClick={() => trackEvent("cta_trial_click", { location: "home_hero" })}
+                >
                   Marcar aula grátis <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>
               </Button>
@@ -91,7 +107,7 @@ function HomePage() {
             </div>
             <ul className="mt-10 flex flex-wrap items-center gap-x-6 gap-y-3 text-sm text-muted-foreground">
               <li className="inline-flex items-center gap-2">
-                <CheckCircle2 className="h-4 w-4 text-brand-light" /> Professor único
+                <CheckCircle2 className="h-4 w-4 text-brand-light" /> Mesmo professor
               </li>
               <li className="inline-flex items-center gap-2">
                 <MailCheck className="h-4 w-4 text-brand-light" /> Confirmação automática por e-mail
@@ -175,8 +191,8 @@ function HomePage() {
             Uma rotina de inglês que cabe na <span className="text-brand-light">sua semana.</span>
           </h2>
           <p className="mt-4 text-muted-foreground">
-            Comece com uma aula experimental grátis, conheça a dinâmica e converse com a gente
-            sobre a frequência ideal para você.
+            Comece com uma aula experimental grátis, conheça a dinâmica e converse com a gente sobre
+            a frequência ideal para você.
           </p>
         </div>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -192,15 +208,15 @@ function HomePage() {
         </div>
       </section>
 
+      <TeacherSection />
+
       <section className="border-y border-border bg-[color:var(--background-soft)]">
         <div className="container-page grid gap-10 py-20 md:grid-cols-2 md:gap-16 md:py-24">
           <div>
             <p className="text-xs font-semibold uppercase tracking-widest text-brand-light">
               Como funciona
             </p>
-            <h2 className="mt-3 text-foreground">
-              Sua aula experimental grátis, sem complicação.
-            </h2>
+            <h2 className="mt-3 text-foreground">Sua aula experimental grátis, sem complicação.</h2>
           </div>
           <ol className="grid gap-4 text-sm text-muted-foreground">
             {[
@@ -217,6 +233,10 @@ function HomePage() {
           </ol>
         </div>
       </section>
+
+      <TestimonialsSection />
+
+      <FaqSection />
 
       <section className="container-page py-24 text-center">
         <p className="text-xs font-semibold uppercase tracking-widest text-brand-light">
@@ -235,7 +255,12 @@ function HomePage() {
             size="lg"
             className="bg-brand text-primary-foreground hover:bg-brand-dark"
           >
-            <Link to="/agendar">Marcar aula grátis</Link>
+            <Link
+              to="/agendar"
+              onClick={() => trackEvent("cta_trial_click", { location: "home_final" })}
+            >
+              Marcar aula grátis
+            </Link>
           </Button>
           <Button
             asChild
@@ -243,7 +268,12 @@ function HomePage() {
             variant="secondary"
             className="border border-border bg-transparent hover:bg-surface"
           >
-            <Link to="/contato">Tirar dúvidas</Link>
+            <Link
+              to="/contato"
+              onClick={() => trackEvent("contact_click", { location: "home_final" })}
+            >
+              Tirar dúvidas
+            </Link>
           </Button>
         </div>
       </section>

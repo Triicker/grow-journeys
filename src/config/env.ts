@@ -22,9 +22,7 @@ export const env = {
   leadsDataSource: readString("VITE_LEADS_DATA_SOURCE", "mock") as DataSource,
   apiBaseUrl: readString("VITE_API_BASE_URL", "http://localhost:3000/api"),
   enableMockErrors: readBool("VITE_ENABLE_MOCK_ERRORS", false),
-  publicContactEmail: readString(
-    "VITE_PUBLIC_CONTACT_EMAIL",
-    "guilherme.augusto.nery1@gmail.com",
-  ),
+  publicSiteUrl: readString("VITE_PUBLIC_SITE_URL", "https://nerya.online"),
+  publicContactEmail: readString("VITE_PUBLIC_CONTACT_EMAIL", "guilherme.augusto.nery1@gmail.com"),
   publicWhatsAppNumber: readString("VITE_PUBLIC_WHATSAPP_NUMBER", ""),
 } as const;

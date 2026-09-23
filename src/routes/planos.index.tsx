@@ -1,10 +1,10 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { PublicLayout } from "@/layouts/PublicLayout";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { queryOptions, useMutation, useQuery } from "@tanstack/react-query";
 import { planRepository } from "@/repositories";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Check, Loader2, Sparkles } from "lucide-react";
 import { formatPriceBRL } from "@/utils/format";
 import { DemoBanner } from "@/components/DemoBanner";
@@ -12,6 +12,34 @@ import { EmptyState, ErrorState, LoadingBlock } from "@/components/States";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 import type { Plan } from "@/types";
+import { siteConfig } from "@/config/site";
+import { trackEvent } from "@/lib/analytics";
+
+const PLANS_TIMEOUT_MS = 8_000;
+
+async function listPlansWithTimeout() {
+  let timeoutId: ReturnType<typeof setTimeout> | undefined;
+  try {
+    return await Promise.race([
+      planRepository.list(),
+      new Promise<never>((_, reject) => {
+        timeoutId = setTimeout(
+          () => reject(new Error("Os planos demoraram para responder. Tente novamente.")),
+          PLANS_TIMEOUT_MS,
+        );
+      }),
+    ]);
+  } finally {
+    if (timeoutId) clearTimeout(timeoutId);
+  }
+}
+
+const plansQueryOptions = queryOptions({
+  queryKey: ["plans"],
+  queryFn: listPlansWithTimeout,
+  staleTime: 60_000,
+  retry: 1,
+});
 
 export const Route = createFileRoute("/planos/")({
   head: () => ({
@@ -19,11 +47,18 @@ export const Route = createFileRoute("/planos/")({
       { title: "Planos — Nerya" },
       {
         name: "description",
-        content:
-          "Conheça os planos de inglês da Nerya e marque uma aula experimental gratuita.",
+        content: "Conheça os planos de inglês da Nerya e marque uma aula experimental gratuita.",
       },
     ],
+    links: [{ rel: "canonical", href: `${siteConfig.url}/planos` }],
   }),
+  loader: async ({ context }) => {
+    try {
+      return await context.queryClient.ensureQueryData(plansQueryOptions);
+    } catch {
+      return null;
+    }
+  },
   component: Plans,
 });
 
@@ -41,11 +76,19 @@ function frequencyLabel(plan: Plan): string {
 
 function Plans() {
   const navigate = useNavigate();
+  const initialPlans = Route.useLoaderData();
+  const trackedViewRef = useRef(false);
   const [selectedPlanId, setSelectedPlanId] = useState<string | null>(null);
   const { data, isPending, error, refetch } = useQuery({
-    queryKey: ["plans"],
-    queryFn: () => planRepository.list(),
+    ...plansQueryOptions,
+    initialData: initialPlans ?? undefined,
   });
+
+  useEffect(() => {
+    if (isPending || trackedViewRef.current) return;
+    trackedViewRef.current = true;
+    trackEvent("plans_view", { plan_count: data?.data.length ?? 0 });
+  }, [data?.data.length, isPending]);
 
   const choosePlan = useMutation({
     mutationFn: async (plan: Plan) => {
@@ -78,8 +121,7 @@ function Plans() {
               Escolha sua frequência.
             </h1>
             <p className="mx-auto mt-4 max-w-2xl text-sm leading-relaxed text-plan-muted md:text-base">
-              Conheça as opções de frequência e comece com uma aula experimental gratuita e ao
-              vivo.
+              Conheça as opções de frequência e comece com uma aula experimental gratuita e ao vivo.
             </p>
           </div>
 
@@ -211,7 +253,11 @@ function Plans() {
                         plan.featured && "bg-plan-primary-dark hover:bg-plan-primary",
                       )}
                       disabled={disabled}
-                      onClick={() => choosePlan.mutate(plan)}
+                      onClick={() => {
+                        trackEvent("plan_select", { plan_id: plan.id, plan_name: plan.name });
+                        trackEvent("cta_trial_click", { location: "plans", plan_id: plan.id });
+                        choosePlan.mutate(plan);
+                      }}
                       aria-label={`Marcar aula experimental grátis após conhecer o plano ${plan.name}, ${priceAria}`}
                     >
                       {isChoosing ? (

@@ -1,7 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { PublicLayout } from "@/layouts/PublicLayout";
 import { LeadCaptureForm } from "@/components/LeadCaptureForm";
-import { env } from "@/config/env";
+import { siteConfig } from "@/config/site";
+import { trackEvent } from "@/lib/analytics";
 
 export const Route = createFileRoute("/contato")({
   head: () => ({
@@ -13,6 +14,7 @@ export const Route = createFileRoute("/contato")({
           "Fale com a Nerya sobre aulas e planos. Envie sua mensagem por e-mail e continue pelo WhatsApp.",
       },
     ],
+    links: [{ rel: "canonical", href: `${siteConfig.url}/contato` }],
   }),
   component: Contact,
 });
@@ -29,8 +31,14 @@ function Contact() {
             e-mail e o atendimento continua no WhatsApp.
           </p>
           <div className="mt-6 space-y-1 text-sm text-muted-foreground">
-            <div>{env.publicContactEmail}</div>
-            <div>Bahia — Brasil</div>
+            <a
+              href={`mailto:${siteConfig.contact.email}`}
+              onClick={() => trackEvent("contact_click", { location: "contact_page_email" })}
+              className="block text-brand-light hover:underline"
+            >
+              {siteConfig.contact.email}
+            </a>
+            <div>{siteConfig.contact.location}</div>
           </div>
         </div>
         <LeadCaptureForm

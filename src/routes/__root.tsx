@@ -9,6 +9,7 @@ import {
 } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
 import { Toaster } from "@/components/ui/sonner";
+import { siteConfig } from "@/config/site";
 
 import appCss from "../styles.css?url";
 import browserIcon from "../utils/logoo.png?url";
@@ -87,14 +88,29 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { property: "og:title", content: "Nerya | Inglês Online" },
       {
         property: "og:description",
-        content: "Aprenda inglês com aulas particulares ao vivo, conversação, pronúncia, viagens, trabalho e acompanhamento individual.",
+        content:
+          "Aprenda inglês com aulas particulares ao vivo, conversação, pronúncia, viagens, trabalho e acompanhamento individual.",
       },
       { property: "og:type", content: "website" },
+      { property: "og:site_name", content: "Nerya" },
+      { property: "og:locale", content: "pt_BR" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: "Nerya | Inglês Online" },
-      { name: "twitter:description", content: "Aprenda inglês com aulas particulares ao vivo, conversação, pronúncia, viagens, trabalho e acompanhamento individual." },
-      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/f881b730-f1b0-4b91-a833-26c16a25fa1c/id-preview-a25be25a--3953b802-f4b2-4fdf-b200-077fb3753c8b.lovable.app-1784635468939.png" },
-      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/f881b730-f1b0-4b91-a833-26c16a25fa1c/id-preview-a25be25a--3953b802-f4b2-4fdf-b200-077fb3753c8b.lovable.app-1784635468939.png" },
+      {
+        name: "twitter:description",
+        content:
+          "Aprenda inglês com aulas particulares ao vivo, conversação, pronúncia, viagens, trabalho e acompanhamento individual.",
+      },
+      {
+        property: "og:image",
+        content:
+          "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/f881b730-f1b0-4b91-a833-26c16a25fa1c/id-preview-a25be25a--3953b802-f4b2-4fdf-b200-077fb3753c8b.lovable.app-1784635468939.png",
+      },
+      {
+        name: "twitter:image",
+        content:
+          "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/f881b730-f1b0-4b91-a833-26c16a25fa1c/id-preview-a25be25a--3953b802-f4b2-4fdf-b200-077fb3753c8b.lovable.app-1784635468939.png",
+      },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
@@ -116,10 +132,25 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 });
 
 function RootShell({ children }: { children: ReactNode }) {
+  const organizationSchema = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: siteConfig.name,
+    url: siteConfig.url,
+    email: siteConfig.contact.email,
+    sameAs: [siteConfig.contact.instagramUrl],
+  };
+
   return (
     <html lang="pt-BR">
       <head>
         <HeadContent />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(organizationSchema).replace(/</g, "\\u003c"),
+          }}
+        />
       </head>
       <body>
         {children}

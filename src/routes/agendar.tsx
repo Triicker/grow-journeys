@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { PublicLayout } from "@/layouts/PublicLayout";
 import { LeadCaptureForm } from "@/components/LeadCaptureForm";
+import { siteConfig } from "@/config/site";
 
 export const Route = createFileRoute("/agendar")({
   head: () => ({
@@ -12,6 +13,7 @@ export const Route = createFileRoute("/agendar")({
           "Solicite sua aula experimental gratuita de inglês. Seus dados são enviados por e-mail e o atendimento continua no WhatsApp.",
       },
     ],
+    links: [{ rel: "canonical", href: `${siteConfig.url}/agendar` }],
   }),
   component: SchedulePublic,
 });

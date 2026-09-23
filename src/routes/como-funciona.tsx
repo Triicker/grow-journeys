@@ -2,6 +2,8 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { PublicLayout } from "@/layouts/PublicLayout";
 import { Button } from "@/components/ui/button";
 import { CheckCircle2, ClipboardList, MailCheck, MessageCircle, Sparkles } from "lucide-react";
+import { siteConfig } from "@/config/site";
+import { trackEvent } from "@/lib/analytics";
 
 export const Route = createFileRoute("/como-funciona")({
   head: () => ({
@@ -13,6 +15,7 @@ export const Route = createFileRoute("/como-funciona")({
           "Entenda como solicitar uma aula experimental gratuita e conhecer as aulas particulares da Nerya.",
       },
     ],
+    links: [{ rel: "canonical", href: `${siteConfig.url}/como-funciona` }],
   }),
   component: HowItWorks,
 });
@@ -87,7 +90,12 @@ function HowItWorks() {
 
         <div className="mt-10 flex flex-wrap gap-3">
           <Button asChild>
-            <Link to="/agendar">Marcar aula grátis</Link>
+            <Link
+              to="/agendar"
+              onClick={() => trackEvent("cta_trial_click", { location: "how_it_works" })}
+            >
+              Marcar aula grátis
+            </Link>
           </Button>
           <Button asChild variant="secondary">
             <Link to="/planos">Ver planos</Link>

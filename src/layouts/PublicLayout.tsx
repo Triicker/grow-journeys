@@ -1,8 +1,10 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import { type ReactNode, useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Instagram, Menu, X } from "lucide-react";
+import { Instagram, Mail, Menu, X } from "lucide-react";
+import { siteConfig } from "@/config/site";
 import { cn } from "@/lib/utils";
+import { trackEvent } from "@/lib/analytics";
 
 const NAV = [
   { to: "/", label: "Início" },
@@ -28,6 +30,10 @@ export function PublicLayout({ children }: { children: ReactNode }) {
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => setOpen(false), [pathname]);
+
+  useEffect(() => {
+    trackEvent("page_view", { path: pathname });
+  }, [pathname]);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
@@ -74,7 +80,12 @@ export function PublicLayout({ children }: { children: ReactNode }) {
               size="sm"
               className="bg-brand text-primary-foreground hover:bg-brand-dark"
             >
-              <Link to="/agendar">Aula experimental</Link>
+              <Link
+                to="/agendar"
+                onClick={() => trackEvent("cta_trial_click", { location: "header_desktop" })}
+              >
+                Aula experimental
+              </Link>
             </Button>
           </div>
 
@@ -107,7 +118,12 @@ export function PublicLayout({ children }: { children: ReactNode }) {
                 size="sm"
                 className="flex-1 bg-brand text-primary-foreground hover:bg-brand-dark"
               >
-                <Link to="/agendar">Aula experimental</Link>
+                <Link
+                  to="/agendar"
+                  onClick={() => trackEvent("cta_trial_click", { location: "header_mobile" })}
+                >
+                  Aula experimental
+                </Link>
               </Button>
             </div>
           </div>
@@ -157,16 +173,29 @@ export function PublicLayout({ children }: { children: ReactNode }) {
                   Contato
                 </Link>
               </li>
+              <li>
+                <Link to="/privacidade" className="transition hover:text-foreground">
+                  Política de Privacidade
+                </Link>
+              </li>
             </ul>
           </div>
           <div>
             <div className="mb-3 text-xs font-semibold uppercase tracking-widest text-muted-foreground">
-              Aviso
+              Atendimento
             </div>
-            <p className="text-xs text-muted-foreground">
+            <p className="text-xs leading-relaxed text-muted-foreground">
               Sua aula experimental é grátis. Envie o formulário e combine os próximos passos pelo
               WhatsApp.
             </p>
+            <a
+              href={`mailto:${siteConfig.contact.email}`}
+              onClick={() => trackEvent("contact_click", { location: "footer_email" })}
+              className="mt-4 inline-flex items-center gap-2 text-xs text-brand-light transition hover:text-foreground"
+            >
+              <Mail className="h-3.5 w-3.5" aria-hidden="true" />
+              {siteConfig.contact.email}
+            </a>
           </div>
         </div>
         <div className="border-t border-border">
@@ -177,7 +206,7 @@ export function PublicLayout({ children }: { children: ReactNode }) {
                 <span className="h-1.5 w-1.5 rounded-full bg-brand" /> Feito com foco em fluência.
               </span>
               <a
-                href="https://www.instagram.com/somosnerya/"
+                href={siteConfig.contact.instagramUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Instagram da Nerya"
@@ -185,7 +214,7 @@ export function PublicLayout({ children }: { children: ReactNode }) {
                 className="inline-flex items-center gap-1.5 rounded-md px-2 py-1 text-muted-foreground transition-colors hover:bg-surface hover:text-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
               >
                 <Instagram className="h-4 w-4" aria-hidden="true" />
-                <span>@somosnerya</span>
+                <span>{siteConfig.contact.instagramHandle}</span>
               </a>
             </div>
           </div>

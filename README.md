@@ -32,7 +32,8 @@ Copie `.env.example` para `.env.local` e ajuste conforme necessário.
 | `VITE_LEADS_DATA_SOURCE`      | `mock` ou `api` apenas para leads públicos      | `mock`                              |
 | `VITE_API_BASE_URL`           | URL base da API                                 | `/api`                              |
 | `VITE_ENABLE_MOCK_ERRORS`     | Injeta falhas simuladas para testar erro/retry  | `false`                             |
-| `VITE_PUBLIC_CONTACT_EMAIL`   | E-mail publico exibido no site                  | `guilherme...@gmail.com`            |
+| `VITE_PUBLIC_SITE_URL`        | Origem pública usada em canonical e metadados   | `https://nerya.online`              |
+| `VITE_PUBLIC_CONTACT_EMAIL`   | E-mail público centralizado                     | `contato@nerya.online`              |
 | `VITE_PUBLIC_WHATSAPP_NUMBER` | Numero publico para WhatsApp Web, com DDI e DDD | vazio                               |
 | `RESEND_API_KEY`              | Chave secreta do Resend, somente servidor       | vazio                               |
 | `RESEND_FROM_EMAIL`           | Remetente verificado do Resend                  | `Nerya <onboarding@resend.dev>`     |
@@ -88,7 +89,7 @@ A chave `RESEND_API_KEY` deve ficar somente no backend. Use `VITE_DATA_SOURCE=mo
 
 ## Rotas principais
 
-Públicas: `/`, `/planos`, `/agendar`, `/como-funciona`, `/contato`, `/entrar`.
+Públicas: `/`, `/planos`, `/agendar`, `/como-funciona`, `/contato`, `/privacidade`, `/entrar`.
 
 Área do aluno: `/aluno`, `/aluno/agendar`, `/aluno/aulas`, `/aluno/historico`, `/aluno/plano`, `/aluno/perfil`.
 
@@ -100,6 +101,7 @@ Rotas antigas relacionadas a cursos, conteúdos e certificados foram mantidas ap
 - [`ALTERACOES_REALIZADAS.md`](ALTERACOES_REALIZADAS.md): resumo das mudanças recentes.
 - [`MELHORIAS_FUTURAS.md`](MELHORIAS_FUTURAS.md): pendências e evolução planejada.
 - [`docs/INTEGRACAO_RESEND.md`](docs/INTEGRACAO_RESEND.md): contrato seguro para notificações futuras.
+- [`docs/P0-FOUNDATION.md`](docs/P0-FOUNDATION.md): fundação de credibilidade, conversão, SEO, privacidade e analytics.
 
 ## Deploy no Render (Web Service Node)
 
