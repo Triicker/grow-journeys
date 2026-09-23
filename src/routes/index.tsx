@@ -2,7 +2,6 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { PublicLayout } from "@/layouts/PublicLayout";
 import { Button } from "@/components/ui/button";
 import { FaqSection } from "@/components/marketing/FaqSection";
-import { TeacherSection } from "@/components/marketing/TeacherSection";
 import { TestimonialsSection } from "@/components/marketing/TestimonialsSection";
 import { siteConfig } from "@/config/site";
 import { trackEvent } from "@/lib/analytics";
@@ -93,7 +92,7 @@ function HomePage() {
                   to="/agendar"
                   onClick={() => trackEvent("cta_trial_click", { location: "home_hero" })}
                 >
-                  Marcar aula grátis <ArrowRight className="ml-2 h-4 w-4" />
+                  Marcar aula experimental <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>
               </Button>
               <Button
@@ -145,7 +144,6 @@ function HomePage() {
                 {[
                   ["Primeiro passo", "Formulário"],
                   ["Formato", "Online"],
-                  ["Investimento", "Gratuito"],
                   ["Próximo passo", "WhatsApp"],
                 ].map(([label, value]) => (
                   <div
@@ -237,8 +235,6 @@ function HomePage() {
         </div>
       </section>
 
-      <TeacherSection />
-
       <section className="border-y border-border bg-[color:var(--background-soft)]">
         <div className="container-page grid gap-10 py-20 md:grid-cols-2 md:gap-16 md:py-24">
           <div>
@@ -288,7 +284,7 @@ function HomePage() {
               to="/agendar"
               onClick={() => trackEvent("cta_trial_click", { location: "home_final" })}
             >
-              Marcar aula grátis
+              Marcar aula experimental
             </Link>
           </Button>
           <Button

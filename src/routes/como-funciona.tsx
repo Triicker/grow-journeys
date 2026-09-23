@@ -94,7 +94,7 @@ function HowItWorks() {
               to="/agendar"
               onClick={() => trackEvent("cta_trial_click", { location: "how_it_works" })}
             >
-              Marcar aula grátis
+              Marcar aula experimental
             </Link>
           </Button>
           <Button asChild variant="secondary">

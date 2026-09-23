@@ -258,7 +258,7 @@ function Plans() {
                         trackEvent("cta_trial_click", { location: "plans", plan_id: plan.id });
                         choosePlan.mutate(plan);
                       }}
-                      aria-label={`Marcar aula experimental grátis após conhecer o plano ${plan.name}, ${priceAria}`}
+                      aria-label={`Marcar aula experimental após conhecer o plano ${plan.name}, ${priceAria}`}
                     >
                       {isChoosing ? (
                         <>
@@ -266,7 +266,7 @@ function Plans() {
                           Selecionando
                         </>
                       ) : (
-                        "Quero uma aula grátis"
+                        "Aula experimental"
                       )}
                     </Button>
                   </article>
