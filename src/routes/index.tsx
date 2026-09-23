@@ -1,6 +1,11 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { PublicLayout } from "@/layouts/PublicLayout";
 import { Button } from "@/components/ui/button";
+import { FaqSection } from "@/components/marketing/FaqSection";
+import { TestimonialsSection } from "@/components/marketing/TestimonialsSection";
+import { siteConfig } from "@/config/site";
+import { trackEvent } from "@/lib/analytics";
+import { SpotlightCard } from "@/components/visual/SpotlightCard";
 import {
   ArrowRight,
   CheckCircle2,
@@ -17,9 +22,17 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "Conheça as aulas particulares de inglês da Nerya e marque uma aula experimental gratuita.",
+          "Aulas individuais de inglês ao vivo, com o mesmo professor, plano personalizado e prática de conversação, pronúncia e vocabulário.",
       },
+      { property: "og:title", content: "Nerya | Aulas particulares de inglês" },
+      {
+        property: "og:description",
+        content:
+          "Aulas individuais ao vivo, acompanhamento do mesmo professor e evolução personalizada.",
+      },
+      { property: "og:url", content: `${siteConfig.url}/` },
     ],
+    links: [{ rel: "canonical", href: `${siteConfig.url}/` }],
   }),
   component: HomePage,
 });
@@ -46,52 +59,47 @@ const FOCUS = [
 function HomePage() {
   return (
     <PublicLayout>
-      <section className="relative overflow-hidden border-b border-border">
-        <div
-          className="pointer-events-none absolute inset-0 opacity-70"
-          aria-hidden
-          style={{
-            background:
-              "radial-gradient(ellipse 60% 50% at 15% 0%, color-mix(in oklab, var(--brand) 22%, transparent), transparent 60%), radial-gradient(ellipse 50% 40% at 90% 100%, color-mix(in oklab, var(--brand-light) 12%, transparent), transparent 60%)",
-          }}
-        />
+      <section className="hero-night relative overflow-hidden border-b border-border">
         <div className="container-page relative grid items-center gap-14 py-20 md:grid-cols-[1.05fr_0.95fr] md:py-28">
           <div className="max-w-xl">
-            <span className="inline-flex items-center gap-2 rounded-full border border-border bg-surface px-3 py-1 text-[11px] font-medium uppercase tracking-widest text-muted-foreground">
+            <span className="neon-badge inline-flex items-center gap-2 rounded-full border bg-surface px-3 py-1 text-[11px] font-medium uppercase tracking-widest text-muted-foreground">
               <span className="h-1.5 w-1.5 rounded-full bg-brand" />
               Aulas particulares ao vivo
             </span>
             <h1 className="mt-6 font-display text-foreground">
-              Inglês que <span className="text-brand-light">conecta.</span>
+              Inglês que <span className="hero-word">conecta.</span>
               <br />
-              Fluência que <span className="text-brand">transforma.</span>
+              Fluência que <span className="hero-word hero-word-violet">transforma.</span>
             </h1>
             <p className="mt-6 max-w-lg text-base leading-relaxed text-muted-foreground md:text-lg">
-              Aprenda inglês em aulas individuais com um professor, agenda flexível e acompanhamento
-              da sua frequência a cada ciclo.
+              Aulas individuais ao vivo, com o mesmo professor acompanhando sua evolução em
+              conversação, pronúncia e vocabulário — no seu ritmo e com flexibilidade.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
               <Button
                 asChild
                 size="lg"
-                className="bg-brand text-primary-foreground hover:bg-brand-dark"
+                className="cta-primary bg-brand text-primary-foreground hover:bg-brand-dark"
               >
-                <Link to="/agendar">
-                  Marcar aula grátis <ArrowRight className="ml-2 h-4 w-4" />
+                <Link
+                  to="/agendar"
+                  onClick={() => trackEvent("cta_trial_click", { location: "home_hero" })}
+                >
+                  Marcar aula experimental <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>
               </Button>
               <Button
                 asChild
                 size="lg"
                 variant="secondary"
-                className="border border-border bg-transparent hover:bg-surface"
+                className="cta-secondary border border-border bg-transparent hover:bg-surface"
               >
-                <Link to="/planos">Ver planos</Link>
+                <Link to="/nivel">Descobrir meu nível</Link>
               </Button>
             </div>
             <ul className="mt-10 flex flex-wrap items-center gap-x-6 gap-y-3 text-sm text-muted-foreground">
               <li className="inline-flex items-center gap-2">
-                <CheckCircle2 className="h-4 w-4 text-brand-light" /> Professor único
+                <CheckCircle2 className="h-4 w-4 text-brand-light" /> Mesmo professor
               </li>
               <li className="inline-flex items-center gap-2">
                 <MailCheck className="h-4 w-4 text-brand-light" /> Confirmação automática por e-mail
@@ -103,8 +111,7 @@ function HomePage() {
           </div>
 
           <div className="relative hidden min-h-[420px] md:block">
-            <div className="absolute inset-0 rounded-2xl border border-border bg-surface/60 backdrop-blur-sm" />
-            <div className="relative flex h-full flex-col justify-between rounded-2xl p-8">
+            <SpotlightCard className="surface-premium flex h-full flex-col justify-between rounded-2xl border p-8">
               <div className="flex items-center justify-between">
                 <div className="text-xs uppercase tracking-widest text-muted-foreground">
                   Aula experimental
@@ -121,7 +128,7 @@ function HomePage() {
                   na prática.
                 </p>
                 <p className="mt-4 text-sm text-muted-foreground">
-                  Preencha o formulário. Seus dados seguem por e-mail e o WhatsApp abre em seguida.
+                  Preencha o formulário e escolha entre consultar horários ou continuar no WhatsApp.
                 </p>
               </div>
 
@@ -129,7 +136,6 @@ function HomePage() {
                 {[
                   ["Primeiro passo", "Formulário"],
                   ["Formato", "Online"],
-                  ["Investimento", "Gratuito"],
                   ["Próximo passo", "WhatsApp"],
                 ].map(([label, value]) => (
                   <div
@@ -143,12 +149,12 @@ function HomePage() {
                   </div>
                 ))}
               </div>
-            </div>
+            </SpotlightCard>
           </div>
         </div>
       </section>
 
-      <section className="border-b border-border">
+      <section className="border-b border-border" data-reveal>
         <div className="container-page grid grid-cols-2 gap-6 py-8 md:grid-cols-4">
           {[
             "Conversação real",
@@ -166,7 +172,36 @@ function HomePage() {
         </div>
       </section>
 
-      <section className="container-page py-20 md:py-24">
+      <section className="night-section border-b border-border" data-reveal>
+        <div className="container-page grid items-center gap-8 py-16 md:grid-cols-[1fr_auto] md:py-20">
+          <div className="max-w-2xl">
+            <p className="text-xs font-semibold uppercase tracking-widest text-brand-light">
+              English Check
+            </p>
+            <h2 className="mt-3 text-foreground">
+              Descubra seu ponto de partida em poucos minutos.
+            </h2>
+            <p className="mt-4 text-muted-foreground">
+              Um diagnóstico gratuito de 12 etapas, com resultado de A1 a C1 e recomendações para
+              seu objetivo. Sem cadastro e sem pedir e-mail antes do resultado.
+            </p>
+            <p className="mt-3 text-xs text-muted-foreground">
+              Resultado orientativo; não é uma certificação oficial.
+            </p>
+          </div>
+          <Button
+            asChild
+            size="lg"
+            className="cta-primary bg-brand text-primary-foreground hover:bg-brand-dark"
+          >
+            <Link to="/nivel">
+              Fazer English Check <ArrowRight className="h-4 w-4" />
+            </Link>
+          </Button>
+        </div>
+      </section>
+
+      <section className="container-page py-20 md:py-24" data-reveal>
         <div className="mb-12 max-w-2xl">
           <p className="text-xs font-semibold uppercase tracking-widest text-brand-light">
             Acompanhamento individual
@@ -175,32 +210,30 @@ function HomePage() {
             Uma rotina de inglês que cabe na <span className="text-brand-light">sua semana.</span>
           </h2>
           <p className="mt-4 text-muted-foreground">
-            Comece com uma aula experimental grátis, conheça a dinâmica e converse com a gente
-            sobre a frequência ideal para você.
+            Comece com uma aula experimental grátis, conheça a dinâmica e converse com a gente sobre
+            a frequência ideal para você.
           </p>
         </div>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {FOCUS.map((f) => (
-            <div key={f.title} className="rounded-xl border border-border bg-surface p-6">
+            <SpotlightCard key={f.title} className="rounded-xl border border-border bg-surface p-6">
               <div className="grid h-10 w-10 place-items-center rounded-lg bg-brand/10 text-brand-light">
                 <f.icon className="h-5 w-5" />
               </div>
               <h3 className="mt-5 text-foreground">{f.title}</h3>
               <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{f.text}</p>
-            </div>
+            </SpotlightCard>
           ))}
         </div>
       </section>
 
-      <section className="border-y border-border bg-[color:var(--background-soft)]">
+      <section className="night-section border-y border-border" data-reveal>
         <div className="container-page grid gap-10 py-20 md:grid-cols-2 md:gap-16 md:py-24">
           <div>
             <p className="text-xs font-semibold uppercase tracking-widest text-brand-light">
               Como funciona
             </p>
-            <h2 className="mt-3 text-foreground">
-              Sua aula experimental grátis, sem complicação.
-            </h2>
+            <h2 className="mt-3 text-foreground">Sua aula experimental grátis, sem complicação.</h2>
           </div>
           <ol className="grid gap-4 text-sm text-muted-foreground">
             {[
@@ -209,7 +242,10 @@ function HomePage() {
               "Continue automaticamente no WhatsApp.",
               "Combine sua aula experimental gratuita e conheça a experiência Nerya.",
             ].map((item, index) => (
-              <li key={item} className="flex gap-4 rounded-lg border border-border/60 bg-card p-4">
+              <li
+                key={item}
+                className="glow-card flex gap-4 rounded-lg border border-border/60 bg-card p-4"
+              >
                 <span className="font-display text-2xl text-brand-light">{index + 1}</span>
                 <span>{item}</span>
               </li>
@@ -218,7 +254,11 @@ function HomePage() {
         </div>
       </section>
 
-      <section className="container-page py-24 text-center">
+      <TestimonialsSection />
+
+      <FaqSection />
+
+      <section className="container-page py-24 text-center" data-reveal>
         <p className="text-xs font-semibold uppercase tracking-widest text-brand-light">
           Bora começar?
         </p>
@@ -233,17 +273,27 @@ function HomePage() {
           <Button
             asChild
             size="lg"
-            className="bg-brand text-primary-foreground hover:bg-brand-dark"
+            className="cta-primary bg-brand text-primary-foreground hover:bg-brand-dark"
           >
-            <Link to="/agendar">Marcar aula grátis</Link>
+            <Link
+              to="/agendar"
+              onClick={() => trackEvent("cta_trial_click", { location: "home_final" })}
+            >
+              Marcar aula experimental
+            </Link>
           </Button>
           <Button
             asChild
             size="lg"
             variant="secondary"
-            className="border border-border bg-transparent hover:bg-surface"
+            className="cta-secondary border border-border bg-transparent hover:bg-surface"
           >
-            <Link to="/contato">Tirar dúvidas</Link>
+            <Link
+              to="/contato"
+              onClick={() => trackEvent("contact_click", { location: "home_final" })}
+            >
+              Tirar dúvidas
+            </Link>
           </Button>
         </div>
       </section>

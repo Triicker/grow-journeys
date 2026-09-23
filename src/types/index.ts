@@ -260,8 +260,19 @@ export interface NotificationResult {
   createdAt: string;
 }
 
-export type LeadIntent = "contact" | "scheduling";
+export type LeadIntent = "contact" | "scheduling" | "assessment_result";
 export type LeadPreferredChannel = "email" | "whatsapp";
+export type LeadGoal =
+  | "conversation"
+  | "work"
+  | "interview"
+  | "travel"
+  | "general"
+  | "exams"
+  | "technology"
+  | "other";
+export type LeadPerceivedLevel = "never" | "basic" | "intermediate" | "advanced" | "unsure";
+export type LeadEstimatedLevel = "A1" | "A2" | "B1" | "B2" | "C1";
 
 export interface LeadRequest {
   id: string;
@@ -271,7 +282,10 @@ export interface LeadRequest {
   whatsapp?: string;
   preferredChannel: LeadPreferredChannel;
   preferredSchedule?: string;
-  message: string;
+  message?: string;
+  goal?: LeadGoal;
+  perceivedLevel?: LeadPerceivedLevel;
+  estimatedLevel?: LeadEstimatedLevel;
   origin?: string;
   createdAt: string;
 }

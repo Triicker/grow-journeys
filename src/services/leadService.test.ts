@@ -131,4 +131,34 @@ describe("leadService", () => {
     expect(response.data.message.toLowerCase()).toContain("enviada por e-mail");
     expect(response.data.message.toLowerCase()).toContain("whatsapp");
   });
+
+  it("can defer the WhatsApp opening while returning the prepared URL", async () => {
+    const open = vi.fn();
+    vi.stubGlobal("window", {
+      location: { href: "https://nerya.example/agendar" },
+      open,
+      localStorage: localStorageStub(),
+    });
+    const { leadService } = await importLeadService({
+      VITE_LEADS_DATA_SOURCE: "mock",
+      VITE_PUBLIC_WHATSAPP_NUMBER: "5571999999999",
+    });
+
+    const response = await leadService.submit(
+      {
+        intent: "scheduling",
+        fullName: "Ana Souza",
+        email: "ana@example.com",
+        whatsapp: "71999999999",
+        preferredChannel: "whatsapp",
+        goal: "conversation",
+        perceivedLevel: "basic",
+        estimatedLevel: "A2",
+      },
+      { deferWhatsApp: true },
+    );
+
+    expect(open).not.toHaveBeenCalled();
+    expect(response.data.whatsappUrl).toContain("English%20Check%3A%20A2");
+  });
 });

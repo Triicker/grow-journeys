@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+Disallow: /aluno/
+Disallow: /entrar
+Disallow: /cadastrar
+Disallow: /recuperar-senha
+Disallow: /redefinir-senha
+Disallow: /planos/checkout
+Disallow: /planos/sucesso
+
+Sitemap: https://nerya.online/sitemap.xml

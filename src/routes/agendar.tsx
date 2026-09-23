@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { PublicLayout } from "@/layouts/PublicLayout";
 import { LeadCaptureForm } from "@/components/LeadCaptureForm";
+import { siteConfig } from "@/config/site";
 
 export const Route = createFileRoute("/agendar")({
   head: () => ({
@@ -9,9 +10,10 @@ export const Route = createFileRoute("/agendar")({
       {
         name: "description",
         content:
-          "Solicite sua aula experimental gratuita de inglês. Seus dados são enviados por e-mail e o atendimento continua no WhatsApp.",
+          "Solicite sua aula experimental gratuita de inglês e escolha entre consultar horários ou continuar pelo WhatsApp.",
       },
     ],
+    links: [{ rel: "canonical", href: `${siteConfig.url}/agendar` }],
   }),
   component: SchedulePublic,
 });
@@ -19,12 +21,12 @@ export const Route = createFileRoute("/agendar")({
 function SchedulePublic() {
   return (
     <PublicLayout>
-      <section className="container-page py-12 md:py-16">
+      <section className="container-page py-12 md:py-16" data-reveal>
         <div className="mx-auto max-w-2xl">
           <LeadCaptureForm
             intent="scheduling"
             title="Marque sua aula experimental grátis"
-            description="Conte um pouco sobre você. Ao enviar, seus dados chegam automaticamente por e-mail e o WhatsApp é aberto para combinar sua aula gratuita."
+            description="Conte um pouco sobre você. Ao enviar, seus dados chegam à Nerya e você escolhe como prefere continuar."
           />
         </div>
       </section>

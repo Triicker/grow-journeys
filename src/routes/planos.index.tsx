@@ -1,17 +1,47 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { PublicLayout } from "@/layouts/PublicLayout";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { queryOptions, useMutation, useQuery } from "@tanstack/react-query";
 import { planRepository } from "@/repositories";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { useState } from "react";
-import { Check, Loader2, Sparkles } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { Check, Loader2, MessageCircle, Sparkles } from "lucide-react";
 import { formatPriceBRL } from "@/utils/format";
 import { DemoBanner } from "@/components/DemoBanner";
 import { EmptyState, ErrorState, LoadingBlock } from "@/components/States";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 import type { Plan } from "@/types";
+import { siteConfig } from "@/config/site";
+import { trackEvent } from "@/lib/analytics";
+import { buildWhatsAppContactUrl } from "@/utils/contact";
+import { SpotlightCard } from "@/components/visual/SpotlightCard";
+
+const PLANS_TIMEOUT_MS = 8_000;
+
+async function listPlansWithTimeout() {
+  let timeoutId: ReturnType<typeof setTimeout> | undefined;
+  try {
+    return await Promise.race([
+      planRepository.list(),
+      new Promise<never>((_, reject) => {
+        timeoutId = setTimeout(
+          () => reject(new Error("Os planos demoraram para responder. Tente novamente.")),
+          PLANS_TIMEOUT_MS,
+        );
+      }),
+    ]);
+  } finally {
+    if (timeoutId) clearTimeout(timeoutId);
+  }
+}
+
+const plansQueryOptions = queryOptions({
+  queryKey: ["plans"],
+  queryFn: listPlansWithTimeout,
+  staleTime: 60_000,
+  retry: 1,
+});
 
 export const Route = createFileRoute("/planos/")({
   head: () => ({
@@ -19,11 +49,18 @@ export const Route = createFileRoute("/planos/")({
       { title: "Planos — Nerya" },
       {
         name: "description",
-        content:
-          "Conheça os planos de inglês da Nerya e marque uma aula experimental gratuita.",
+        content: "Conheça os planos de inglês da Nerya e marque uma aula experimental gratuita.",
       },
     ],
+    links: [{ rel: "canonical", href: `${siteConfig.url}/planos` }],
   }),
+  loader: async ({ context }) => {
+    try {
+      return await context.queryClient.ensureQueryData(plansQueryOptions);
+    } catch {
+      return null;
+    }
+  },
   component: Plans,
 });
 
@@ -41,11 +78,19 @@ function frequencyLabel(plan: Plan): string {
 
 function Plans() {
   const navigate = useNavigate();
+  const initialPlans = Route.useLoaderData();
+  const trackedViewRef = useRef(false);
   const [selectedPlanId, setSelectedPlanId] = useState<string | null>(null);
   const { data, isPending, error, refetch } = useQuery({
-    queryKey: ["plans"],
-    queryFn: () => planRepository.list(),
+    ...plansQueryOptions,
+    initialData: initialPlans ?? undefined,
   });
+
+  useEffect(() => {
+    if (isPending || trackedViewRef.current) return;
+    trackedViewRef.current = true;
+    trackEvent("plans_view", { plan_count: data?.data.length ?? 0 });
+  }, [data?.data.length, isPending]);
 
   const choosePlan = useMutation({
     mutationFn: async (plan: Plan) => {
@@ -78,8 +123,7 @@ function Plans() {
               Escolha sua frequência.
             </h1>
             <p className="mx-auto mt-4 max-w-2xl text-sm leading-relaxed text-plan-muted md:text-base">
-              Conheça as opções de frequência e comece com uma aula experimental gratuita e ao
-              vivo.
+              Conheça as opções de frequência e comece com uma aula experimental gratuita e ao vivo.
             </p>
           </div>
 
@@ -120,12 +164,16 @@ function Plans() {
                 const priceAria = plan.originalMonthlyPriceCents
                   ? `${formatPriceBRL(plan.monthlyPriceCents)} por mês, de ${formatPriceBRL(plan.originalMonthlyPriceCents)}`
                   : `${formatPriceBRL(plan.monthlyPriceCents)}`;
+                const planWhatsappUrl = buildWhatsAppContactUrl(
+                  `Olá, tenho interesse em adquirir o plano ${plan.name} da Nerya (${frequencyLabel(plan)}, ${formatPriceBRL(plan.monthlyPriceCents)}). Gostaria de saber como continuar.`,
+                );
 
                 return (
-                  <article
+                  <SpotlightCard
+                    as="article"
                     key={plan.id}
                     className={cn(
-                      "relative flex min-w-0 flex-col rounded-lg border bg-plan-panel p-5 shadow-sm transition-colors",
+                      "relative flex min-w-0 flex-col rounded-lg border bg-plan-panel p-5 shadow-sm",
                       plan.featured
                         ? "border-plan-primary bg-plan-panel-soft shadow-[0_18px_45px_-34px_var(--plan-primary-dark)]"
                         : "border-plan-border",
@@ -133,7 +181,7 @@ function Plans() {
                     )}
                   >
                     {plan.featured && (
-                      <Badge className="absolute -top-3 left-4 gap-1 bg-plan-primary text-primary-foreground">
+                      <Badge className="neon-badge absolute -top-3 left-4 gap-1 bg-plan-primary text-primary-foreground">
                         <Sparkles className="h-3 w-3" aria-hidden="true" />
                         Recomendado
                       </Badge>
@@ -204,26 +252,72 @@ function Plans() {
                       ))}
                     </ul>
 
-                    <Button
-                      type="button"
-                      className={cn(
-                        "mt-6 min-h-11 w-full whitespace-normal bg-plan-primary px-3 text-center text-xs leading-tight text-primary-foreground hover:bg-plan-primary-dark",
-                        plan.featured && "bg-plan-primary-dark hover:bg-plan-primary",
-                      )}
-                      disabled={disabled}
-                      onClick={() => choosePlan.mutate(plan)}
-                      aria-label={`Marcar aula experimental grátis após conhecer o plano ${plan.name}, ${priceAria}`}
-                    >
-                      {isChoosing ? (
-                        <>
-                          <Loader2 className="mr-2 h-4 w-4 animate-spin" aria-hidden="true" />
-                          Selecionando
-                        </>
+                    <div className="mt-6 grid gap-2">
+                      <Button
+                        type="button"
+                        className={cn(
+                          "cta-primary min-h-11 w-full whitespace-normal bg-plan-primary px-3 text-center text-xs leading-tight text-primary-foreground hover:bg-plan-primary-dark",
+                          plan.featured && "bg-plan-primary-dark hover:bg-plan-primary",
+                        )}
+                        disabled={disabled}
+                        onClick={() => {
+                          trackEvent("plan_select", { plan_id: plan.id, plan_name: plan.name });
+                          trackEvent("cta_trial_click", { location: "plans", plan_id: plan.id });
+                          choosePlan.mutate(plan);
+                        }}
+                        aria-label={`Marcar aula experimental após conhecer o plano ${plan.name}, ${priceAria}`}
+                      >
+                        {isChoosing ? (
+                          <>
+                            <Loader2 className="mr-2 h-4 w-4 animate-spin" aria-hidden="true" />
+                            Selecionando
+                          </>
+                        ) : (
+                          "Aula experimental"
+                        )}
+                      </Button>
+
+                      {planWhatsappUrl ? (
+                        <Button
+                          asChild
+                          type="button"
+                          className="min-h-11 w-full whitespace-normal bg-[#25D366] px-3 text-center text-xs leading-tight text-white hover:bg-[#20bd5a]"
+                        >
+                          <a
+                            href={planWhatsappUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            aria-label={`Adquirir o plano ${plan.name} pelo WhatsApp`}
+                            onClick={() => {
+                              trackEvent("plan_select", {
+                                plan_id: plan.id,
+                                plan_name: plan.name,
+                                destination: "whatsapp",
+                              });
+                              trackEvent("whatsapp_click", {
+                                location: "plans",
+                                plan_id: plan.id,
+                              });
+                            }}
+                          >
+                            <MessageCircle className="h-4 w-4" aria-hidden="true" />
+                            Adquirir plano
+                          </a>
+                        </Button>
                       ) : (
-                        "Quero uma aula grátis"
+                        <Button
+                          type="button"
+                          variant="outline"
+                          disabled
+                          title="Configure o WhatsApp institucional para habilitar"
+                          className="min-h-11 w-full whitespace-normal px-3 text-center text-xs leading-tight"
+                        >
+                          <MessageCircle className="h-4 w-4" aria-hidden="true" />
+                          Adquirir plano
+                        </Button>
                       )}
-                    </Button>
-                  </article>
+                    </div>
+                  </SpotlightCard>
                 );
               })}
             </div>

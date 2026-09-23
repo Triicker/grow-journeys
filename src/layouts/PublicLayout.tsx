@@ -1,13 +1,18 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import { type ReactNode, useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Instagram, Menu, X } from "lucide-react";
+import { Instagram, Mail, Menu, MessageCircle, X } from "lucide-react";
+import { siteConfig } from "@/config/site";
 import { cn } from "@/lib/utils";
+import { trackEvent } from "@/lib/analytics";
+import { buildWhatsAppContactUrl } from "@/utils/contact";
+import { ScrollRevealObserver } from "@/components/visual/ScrollRevealObserver";
 
 const NAV = [
   { to: "/", label: "Início" },
   { to: "/planos", label: "Planos" },
   { to: "/agendar", label: "Aula experimental" },
+  { to: "/nivel", label: "Teste de nível" },
   { to: "/como-funciona", label: "Como funciona" },
   { to: "/contato", label: "Contato" },
 ] as const;
@@ -26,8 +31,15 @@ export function PublicLayout({ children }: { children: ReactNode }) {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const whatsappUrl = buildWhatsAppContactUrl(
+    "Olá, gostaria de falar com a Nerya sobre as aulas de inglês.",
+  );
 
   useEffect(() => setOpen(false), [pathname]);
+
+  useEffect(() => {
+    trackEvent("page_view", { path: pathname });
+  }, [pathname]);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
@@ -37,18 +49,19 @@ export function PublicLayout({ children }: { children: ReactNode }) {
   }, []);
 
   return (
-    <div className="flex min-h-screen flex-col bg-background">
+    <div className="nerya-night flex min-h-screen flex-col bg-background">
+      <ScrollRevealObserver />
       <header
         className={cn(
-          "sticky top-0 z-40 border-b transition-colors duration-200",
+          "sticky top-0 z-40 border-b transition-[background-color,border-color,box-shadow] duration-300",
           scrolled
-            ? "border-border bg-background/85 backdrop-blur-md"
+            ? "border-brand-light/15 bg-background/88 shadow-[0_14px_38px_-30px_var(--glow-blue-medium)] backdrop-blur-md"
             : "border-transparent bg-background/60 backdrop-blur",
         )}
       >
         <div className="container-page flex h-16 items-center justify-between gap-6 md:h-[72px]">
           <Link to="/" className="flex shrink-0 items-center" aria-label="Nerya — Início">
-            <Logo />
+            <Logo className="logo-night" />
           </Link>
 
           <nav className="hidden items-center gap-1 lg:flex">
@@ -56,10 +69,9 @@ export function PublicLayout({ children }: { children: ReactNode }) {
               <Link
                 key={item.to}
                 to={item.to}
-                className="relative rounded-md px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+                className="nav-link-night relative rounded-md px-3 py-2 text-sm font-medium text-muted-foreground transition-colors duration-200 hover:text-foreground"
                 activeProps={{
-                  className:
-                    "text-foreground after:absolute after:left-3 after:right-3 after:-bottom-0.5 after:h-[2px] after:rounded-full after:bg-brand",
+                  className: "text-foreground",
                 }}
                 activeOptions={{ exact: item.to === "/" }}
               >
@@ -72,9 +84,14 @@ export function PublicLayout({ children }: { children: ReactNode }) {
             <Button
               asChild
               size="sm"
-              className="bg-brand text-primary-foreground hover:bg-brand-dark"
+              className="cta-primary bg-brand text-primary-foreground hover:bg-brand-dark"
             >
-              <Link to="/agendar">Aula experimental</Link>
+              <Link
+                to="/agendar"
+                onClick={() => trackEvent("cta_trial_click", { location: "header_desktop" })}
+              >
+                Aula experimental
+              </Link>
             </Button>
           </div>
 
@@ -107,7 +124,12 @@ export function PublicLayout({ children }: { children: ReactNode }) {
                 size="sm"
                 className="flex-1 bg-brand text-primary-foreground hover:bg-brand-dark"
               >
-                <Link to="/agendar">Aula experimental</Link>
+                <Link
+                  to="/agendar"
+                  onClick={() => trackEvent("cta_trial_click", { location: "header_mobile" })}
+                >
+                  Aula experimental
+                </Link>
               </Button>
             </div>
           </div>
@@ -116,7 +138,7 @@ export function PublicLayout({ children }: { children: ReactNode }) {
 
       <main className="flex-1">{children}</main>
 
-      <footer className="border-t border-border bg-[color:var(--background-soft)]">
+      <footer className="night-section border-t border-border">
         <div className="container-page grid gap-10 py-14 md:grid-cols-4">
           <div>
             <Logo className="text-3xl" />
@@ -140,6 +162,11 @@ export function PublicLayout({ children }: { children: ReactNode }) {
                   Aula experimental
                 </Link>
               </li>
+              <li>
+                <Link to="/nivel" className="transition hover:text-foreground">
+                  English Check
+                </Link>
+              </li>
             </ul>
           </div>
           <div>
@@ -157,16 +184,29 @@ export function PublicLayout({ children }: { children: ReactNode }) {
                   Contato
                 </Link>
               </li>
+              <li>
+                <Link to="/privacidade" className="transition hover:text-foreground">
+                  Política de Privacidade
+                </Link>
+              </li>
             </ul>
           </div>
           <div>
             <div className="mb-3 text-xs font-semibold uppercase tracking-widest text-muted-foreground">
-              Aviso
+              Atendimento
             </div>
-            <p className="text-xs text-muted-foreground">
+            <p className="text-xs leading-relaxed text-muted-foreground">
               Sua aula experimental é grátis. Envie o formulário e combine os próximos passos pelo
               WhatsApp.
             </p>
+            <a
+              href={`mailto:${siteConfig.contact.email}`}
+              onClick={() => trackEvent("contact_click", { location: "footer_email" })}
+              className="mt-4 inline-flex items-center gap-2 text-xs text-brand-light transition hover:text-foreground"
+            >
+              <Mail className="h-3.5 w-3.5" aria-hidden="true" />
+              {siteConfig.contact.email}
+            </a>
           </div>
         </div>
         <div className="border-t border-border">
@@ -177,7 +217,7 @@ export function PublicLayout({ children }: { children: ReactNode }) {
                 <span className="h-1.5 w-1.5 rounded-full bg-brand" /> Feito com foco em fluência.
               </span>
               <a
-                href="https://www.instagram.com/somosnerya/"
+                href={siteConfig.contact.instagramUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Instagram da Nerya"
@@ -185,12 +225,29 @@ export function PublicLayout({ children }: { children: ReactNode }) {
                 className="inline-flex items-center gap-1.5 rounded-md px-2 py-1 text-muted-foreground transition-colors hover:bg-surface hover:text-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
               >
                 <Instagram className="h-4 w-4" aria-hidden="true" />
-                <span>@somosnerya</span>
+                <span>{siteConfig.contact.instagramHandle}</span>
               </a>
             </div>
           </div>
         </div>
       </footer>
+
+      {whatsappUrl && (
+        <a
+          href={whatsappUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Falar com a Nerya pelo WhatsApp"
+          title="Falar pelo WhatsApp"
+          onClick={() =>
+            trackEvent("whatsapp_click", { location: "floating_button", path: pathname })
+          }
+          className="fixed bottom-5 right-4 z-50 grid h-14 w-14 place-items-center rounded-full border-4 border-white/80 bg-[#25D366] text-white shadow-[0_10px_30px_rgba(0,0,0,0.28)] transition duration-200 hover:scale-105 hover:bg-[#20bd5a] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#25D366] focus-visible:ring-offset-2 md:bottom-7 md:right-7 md:h-16 md:w-16"
+        >
+          <MessageCircle className="h-7 w-7 md:h-8 md:w-8" strokeWidth={2.5} aria-hidden="true" />
+          <span className="sr-only">WhatsApp</span>
+        </a>
+      )}
     </div>
   );
 }
