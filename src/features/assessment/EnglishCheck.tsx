@@ -86,7 +86,7 @@ export function EnglishCheck() {
   if (session.result) return <AssessmentResultView session={session} onRestart={restart} />;
   if (!ready || !started) {
     return (
-      <section className="mx-auto max-w-3xl rounded-2xl border border-border bg-card p-6 text-center md:p-10">
+      <section className="surface-premium mx-auto max-w-3xl rounded-2xl border border-border bg-card p-6 text-center md:p-10">
         <p className="text-xs font-semibold uppercase tracking-widest text-brand-light">
           English Check
         </p>
@@ -99,7 +99,7 @@ export function EnglishCheck() {
           Este é um diagnóstico orientativo baseado no CEFR (A1 a C1), não uma certificação oficial.
         </p>
         <Button
-          className="mt-7 bg-brand text-primary-foreground hover:bg-brand-dark"
+          className="cta-primary mt-7 bg-brand text-primary-foreground hover:bg-brand-dark"
           size="lg"
           onClick={() => {
             setStarted(true);
@@ -115,7 +115,7 @@ export function EnglishCheck() {
   const question =
     session.currentStep >= 2 ? ASSESSMENT_QUESTIONS[session.currentStep - 2] : undefined;
   return (
-    <section className="mx-auto max-w-3xl rounded-2xl border border-border bg-card p-5 md:p-8">
+    <section className="surface-premium mx-auto max-w-3xl rounded-2xl border border-border bg-card p-5 md:p-8">
       <div className="mb-8">
         <div className="mb-2 flex items-center justify-between gap-4 text-xs text-muted-foreground">
           <span>
@@ -169,7 +169,7 @@ export function EnglishCheck() {
         <Button
           disabled={!canContinue}
           onClick={next}
-          className="bg-brand text-primary-foreground hover:bg-brand-dark"
+          className="cta-primary bg-brand text-primary-foreground hover:bg-brand-dark"
         >
           {session.currentStep === TOTAL_STEPS - 1 ? "Ver resultado" : "Continuar"}
           <ArrowRight className="h-4 w-4" />
@@ -204,7 +204,7 @@ function ChoiceStep({
         {options.map((option) => (
           <label
             key={option.value}
-            className={`flex min-h-14 cursor-pointer items-center gap-3 rounded-lg border p-4 text-sm transition ${value === option.value ? "border-brand bg-brand/10" : "border-border hover:border-brand/50 hover:bg-surface"}`}
+            className={`glow-card flex min-h-14 cursor-pointer items-center gap-3 rounded-lg border p-4 text-sm ${value === option.value ? "border-neon-blue/50 bg-brand/15 shadow-[0_16px_42px_-30px_var(--glow-blue-medium)]" : "border-border hover:border-brand/50 hover:bg-surface"}`}
           >
             <input
               type="radio"
@@ -261,7 +261,7 @@ function AssessmentResultView({
 
   return (
     <section className="mx-auto max-w-4xl space-y-6">
-      <div className="rounded-2xl border border-brand/30 bg-card p-6 md:p-10">
+      <div className="surface-premium rounded-2xl border border-brand/30 bg-card p-6 md:p-10">
         <p className="text-xs font-semibold uppercase tracking-widest text-brand-light">
           Seu resultado orientativo
         </p>
@@ -277,7 +277,7 @@ function AssessmentResultView({
           <strong>Seu objetivo:</strong> {goalLabel(result.goal)}
         </p>
         <div className="mt-7 grid gap-4 md:grid-cols-2">
-          <div className="rounded-xl border border-border bg-surface p-5">
+          <div className="glow-card rounded-xl border border-border bg-surface p-5">
             <h2 className="font-display text-xl">Pontos fortes</h2>
             <ul className="mt-3 space-y-2 text-sm text-muted-foreground">
               {result.strengths.map((item) => (
@@ -285,7 +285,7 @@ function AssessmentResultView({
               ))}
             </ul>
           </div>
-          <div className="rounded-xl border border-border bg-surface p-5">
+          <div className="glow-card rounded-xl border border-border bg-surface p-5">
             <h2 className="font-display text-xl">O que desenvolver</h2>
             <ul className="mt-3 space-y-2 text-sm text-muted-foreground">
               {result.improvements.map((item) => (
@@ -294,7 +294,7 @@ function AssessmentResultView({
             </ul>
           </div>
         </div>
-        <div className="mt-5 rounded-xl border border-border p-5">
+        <div className="glow-card mt-5 rounded-xl border border-border p-5">
           <h2 className="font-display text-xl">Próximo passo recomendado</h2>
           <p className="mt-2 text-sm text-muted-foreground">{result.recommendation}</p>
         </div>
@@ -306,7 +306,7 @@ function AssessmentResultView({
           <Button
             asChild
             size="lg"
-            className="bg-brand text-primary-foreground hover:bg-brand-dark"
+            className="cta-primary bg-brand text-primary-foreground hover:bg-brand-dark"
           >
             <Link
               to="/agendar"
@@ -323,7 +323,7 @@ function AssessmentResultView({
 
       <form
         onSubmit={sendResult}
-        className="rounded-2xl border border-border bg-card p-6"
+        className="surface-premium rounded-2xl border border-border bg-card p-6"
         aria-busy={status === "loading"}
       >
         <p className="text-xs font-semibold uppercase tracking-widest text-brand-light">Opcional</p>

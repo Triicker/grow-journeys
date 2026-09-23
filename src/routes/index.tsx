@@ -5,6 +5,7 @@ import { FaqSection } from "@/components/marketing/FaqSection";
 import { TestimonialsSection } from "@/components/marketing/TestimonialsSection";
 import { siteConfig } from "@/config/site";
 import { trackEvent } from "@/lib/analytics";
+import { SpotlightCard } from "@/components/visual/SpotlightCard";
 import {
   ArrowRight,
   CheckCircle2,
@@ -58,25 +59,17 @@ const FOCUS = [
 function HomePage() {
   return (
     <PublicLayout>
-      <section className="relative overflow-hidden border-b border-border">
-        <div
-          className="pointer-events-none absolute inset-0 opacity-70"
-          aria-hidden
-          style={{
-            background:
-              "radial-gradient(ellipse 60% 50% at 15% 0%, color-mix(in oklab, var(--brand) 22%, transparent), transparent 60%), radial-gradient(ellipse 50% 40% at 90% 100%, color-mix(in oklab, var(--brand-light) 12%, transparent), transparent 60%)",
-          }}
-        />
+      <section className="hero-night relative overflow-hidden border-b border-border">
         <div className="container-page relative grid items-center gap-14 py-20 md:grid-cols-[1.05fr_0.95fr] md:py-28">
           <div className="max-w-xl">
-            <span className="inline-flex items-center gap-2 rounded-full border border-border bg-surface px-3 py-1 text-[11px] font-medium uppercase tracking-widest text-muted-foreground">
+            <span className="neon-badge inline-flex items-center gap-2 rounded-full border bg-surface px-3 py-1 text-[11px] font-medium uppercase tracking-widest text-muted-foreground">
               <span className="h-1.5 w-1.5 rounded-full bg-brand" />
               Aulas particulares ao vivo
             </span>
             <h1 className="mt-6 font-display text-foreground">
-              Inglês que <span className="text-brand-light">conecta.</span>
+              Inglês que <span className="hero-word">conecta.</span>
               <br />
-              Fluência que <span className="text-brand">transforma.</span>
+              Fluência que <span className="hero-word hero-word-violet">transforma.</span>
             </h1>
             <p className="mt-6 max-w-lg text-base leading-relaxed text-muted-foreground md:text-lg">
               Aulas individuais ao vivo, com o mesmo professor acompanhando sua evolução em
@@ -86,7 +79,7 @@ function HomePage() {
               <Button
                 asChild
                 size="lg"
-                className="bg-brand text-primary-foreground hover:bg-brand-dark"
+                className="cta-primary bg-brand text-primary-foreground hover:bg-brand-dark"
               >
                 <Link
                   to="/agendar"
@@ -99,7 +92,7 @@ function HomePage() {
                 asChild
                 size="lg"
                 variant="secondary"
-                className="border border-border bg-transparent hover:bg-surface"
+                className="cta-secondary border border-border bg-transparent hover:bg-surface"
               >
                 <Link to="/nivel">Descobrir meu nível</Link>
               </Button>
@@ -118,8 +111,7 @@ function HomePage() {
           </div>
 
           <div className="relative hidden min-h-[420px] md:block">
-            <div className="absolute inset-0 rounded-2xl border border-border bg-surface/60 backdrop-blur-sm" />
-            <div className="relative flex h-full flex-col justify-between rounded-2xl p-8">
+            <SpotlightCard className="surface-premium flex h-full flex-col justify-between rounded-2xl border p-8">
               <div className="flex items-center justify-between">
                 <div className="text-xs uppercase tracking-widest text-muted-foreground">
                   Aula experimental
@@ -157,12 +149,12 @@ function HomePage() {
                   </div>
                 ))}
               </div>
-            </div>
+            </SpotlightCard>
           </div>
         </div>
       </section>
 
-      <section className="border-b border-border">
+      <section className="border-b border-border" data-reveal>
         <div className="container-page grid grid-cols-2 gap-6 py-8 md:grid-cols-4">
           {[
             "Conversação real",
@@ -180,7 +172,7 @@ function HomePage() {
         </div>
       </section>
 
-      <section className="border-b border-border bg-[color:var(--background-soft)]">
+      <section className="night-section border-b border-border" data-reveal>
         <div className="container-page grid items-center gap-8 py-16 md:grid-cols-[1fr_auto] md:py-20">
           <div className="max-w-2xl">
             <p className="text-xs font-semibold uppercase tracking-widest text-brand-light">
@@ -200,7 +192,7 @@ function HomePage() {
           <Button
             asChild
             size="lg"
-            className="bg-brand text-primary-foreground hover:bg-brand-dark"
+            className="cta-primary bg-brand text-primary-foreground hover:bg-brand-dark"
           >
             <Link to="/nivel">
               Fazer English Check <ArrowRight className="h-4 w-4" />
@@ -209,7 +201,7 @@ function HomePage() {
         </div>
       </section>
 
-      <section className="container-page py-20 md:py-24">
+      <section className="container-page py-20 md:py-24" data-reveal>
         <div className="mb-12 max-w-2xl">
           <p className="text-xs font-semibold uppercase tracking-widest text-brand-light">
             Acompanhamento individual
@@ -224,18 +216,18 @@ function HomePage() {
         </div>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {FOCUS.map((f) => (
-            <div key={f.title} className="rounded-xl border border-border bg-surface p-6">
+            <SpotlightCard key={f.title} className="rounded-xl border border-border bg-surface p-6">
               <div className="grid h-10 w-10 place-items-center rounded-lg bg-brand/10 text-brand-light">
                 <f.icon className="h-5 w-5" />
               </div>
               <h3 className="mt-5 text-foreground">{f.title}</h3>
               <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{f.text}</p>
-            </div>
+            </SpotlightCard>
           ))}
         </div>
       </section>
 
-      <section className="border-y border-border bg-[color:var(--background-soft)]">
+      <section className="night-section border-y border-border" data-reveal>
         <div className="container-page grid gap-10 py-20 md:grid-cols-2 md:gap-16 md:py-24">
           <div>
             <p className="text-xs font-semibold uppercase tracking-widest text-brand-light">
@@ -250,7 +242,10 @@ function HomePage() {
               "Continue automaticamente no WhatsApp.",
               "Combine sua aula experimental gratuita e conheça a experiência Nerya.",
             ].map((item, index) => (
-              <li key={item} className="flex gap-4 rounded-lg border border-border/60 bg-card p-4">
+              <li
+                key={item}
+                className="glow-card flex gap-4 rounded-lg border border-border/60 bg-card p-4"
+              >
                 <span className="font-display text-2xl text-brand-light">{index + 1}</span>
                 <span>{item}</span>
               </li>
@@ -263,7 +258,7 @@ function HomePage() {
 
       <FaqSection />
 
-      <section className="container-page py-24 text-center">
+      <section className="container-page py-24 text-center" data-reveal>
         <p className="text-xs font-semibold uppercase tracking-widest text-brand-light">
           Bora começar?
         </p>
@@ -278,7 +273,7 @@ function HomePage() {
           <Button
             asChild
             size="lg"
-            className="bg-brand text-primary-foreground hover:bg-brand-dark"
+            className="cta-primary bg-brand text-primary-foreground hover:bg-brand-dark"
           >
             <Link
               to="/agendar"
@@ -291,7 +286,7 @@ function HomePage() {
             asChild
             size="lg"
             variant="secondary"
-            className="border border-border bg-transparent hover:bg-surface"
+            className="cta-secondary border border-border bg-transparent hover:bg-surface"
           >
             <Link
               to="/contato"

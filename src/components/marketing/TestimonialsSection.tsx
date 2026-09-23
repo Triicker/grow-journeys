@@ -1,6 +1,7 @@
 import { CirclePlay, Quote, UserRound } from "lucide-react";
 import { siteConfig } from "@/config/site";
 import { useSectionTracking } from "@/hooks/use-section-tracking";
+import { SpotlightCard } from "@/components/visual/SpotlightCard";
 
 export function TestimonialsSection() {
   const testimonials = siteConfig.testimonials;
@@ -10,7 +11,12 @@ export function TestimonialsSection() {
   });
 
   return (
-    <section ref={sectionRef} id="depoimentos" className="container-page py-20 md:py-24">
+    <section
+      ref={sectionRef}
+      id="depoimentos"
+      className="container-page py-20 md:py-24"
+      data-reveal
+    >
       <div className="grid gap-10 md:grid-cols-[0.78fr_1.22fr] md:gap-16">
         <div>
           <p className="text-xs font-semibold uppercase tracking-widest text-brand-light">
@@ -24,7 +30,7 @@ export function TestimonialsSection() {
         </div>
 
         {testimonials.length === 0 ? (
-          <div className="flex min-h-56 items-center rounded-2xl border border-dashed border-border bg-surface/40 p-8">
+          <SpotlightCard className="flex min-h-56 items-center rounded-2xl border border-dashed border-border bg-surface/40 p-8">
             <div>
               <Quote className="h-7 w-7 text-brand-light" aria-hidden="true" />
               <p className="mt-5 text-lg font-medium text-foreground">
@@ -35,11 +41,12 @@ export function TestimonialsSection() {
                 futuramente, vídeo. A publicação depende da coleta e autorização dos alunos.
               </p>
             </div>
-          </div>
+          </SpotlightCard>
         ) : (
           <div className="grid gap-5 sm:grid-cols-2">
             {testimonials.map((testimonial) => (
-              <figure
+              <SpotlightCard
+                as="figure"
                 key={testimonial.id}
                 className="rounded-xl border border-border bg-surface p-6"
               >
@@ -76,7 +83,7 @@ export function TestimonialsSection() {
                     </a>
                   )}
                 </figcaption>
-              </figure>
+              </SpotlightCard>
             ))}
           </div>
         )}

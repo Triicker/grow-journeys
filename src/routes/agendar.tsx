@@ -21,7 +21,7 @@ export const Route = createFileRoute("/agendar")({
 function SchedulePublic() {
   return (
     <PublicLayout>
-      <section className="container-page py-12 md:py-16">
+      <section className="container-page py-12 md:py-16" data-reveal>
         <div className="mx-auto max-w-2xl">
           <LeadCaptureForm
             intent="scheduling"

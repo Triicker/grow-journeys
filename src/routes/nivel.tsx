@@ -27,7 +27,7 @@ export const Route = createFileRoute("/nivel")({
 function EnglishCheckPage() {
   return (
     <PublicLayout>
-      <div className="container-page py-10 md:py-16">
+      <div className="container-page py-10 md:py-16" data-reveal>
         <EnglishCheck />
       </div>
     </PublicLayout>

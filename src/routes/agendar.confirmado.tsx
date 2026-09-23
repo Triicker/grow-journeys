@@ -20,7 +20,7 @@ function BookingConfirmedPage() {
   return (
     <PublicLayout>
       <section className="container-page py-16">
-        <div className="mx-auto max-w-2xl rounded-2xl border border-border bg-card p-7 text-center md:p-10">
+        <div className="surface-premium mx-auto max-w-2xl rounded-2xl border border-border bg-card p-7 text-center md:p-10">
           {booking ? (
             <>
               <CheckCircle2 className="mx-auto h-12 w-12 text-brand-light" />

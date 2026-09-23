@@ -79,7 +79,7 @@ function PublicBookingPage() {
   return (
     <PublicLayout>
       <section className="container-page py-12 md:py-16">
-        <div className="mx-auto max-w-3xl rounded-2xl border border-border bg-card p-6 md:p-9">
+        <div className="surface-premium mx-auto max-w-3xl rounded-2xl border border-border bg-card p-6 md:p-9">
           <p className="text-xs font-semibold uppercase tracking-widest text-brand-light">
             Agenda pública
           </p>
@@ -89,7 +89,7 @@ function PublicBookingPage() {
           </p>
 
           {!lead ? (
-            <div className="mt-7 rounded-lg border border-border bg-surface p-5">
+            <div className="glow-card mt-7 rounded-lg border border-border bg-surface p-5">
               <p className="text-sm text-muted-foreground">
                 Primeiro envie seus dados para podermos identificar sua solicitação.
               </p>
@@ -102,7 +102,7 @@ function PublicBookingPage() {
               Consultando disponibilidade...
             </p>
           ) : dates.length === 0 ? (
-            <div className="mt-8 rounded-xl border border-brand/30 bg-brand/10 p-6">
+            <div className="glow-card mt-8 rounded-xl border border-brand/30 bg-brand/10 p-6">
               <CalendarDays className="h-6 w-6 text-brand-light" aria-hidden="true" />
               <h2 className="mt-3 font-display text-2xl">Agenda online ainda não disponível</h2>
               <p className="mt-2 text-sm text-muted-foreground">
@@ -112,7 +112,7 @@ function PublicBookingPage() {
               {lead.whatsappUrl ? (
                 <Button
                   asChild
-                  className="mt-5 bg-brand text-primary-foreground hover:bg-brand-dark"
+                  className="cta-primary mt-5 bg-brand text-primary-foreground hover:bg-brand-dark"
                 >
                   <a
                     href={lead.whatsappUrl}

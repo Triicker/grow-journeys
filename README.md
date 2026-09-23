@@ -104,6 +104,7 @@ Rotas antigas relacionadas a cursos, conteúdos e certificados foram mantidas ap
 - [`docs/INTEGRACAO_RESEND.md`](docs/INTEGRACAO_RESEND.md): contrato seguro para notificações futuras.
 - [`docs/P0-FOUNDATION.md`](docs/P0-FOUNDATION.md): fundação de credibilidade, conversão, SEO, privacidade e analytics.
 - [`docs/P1-ENGLISH-CHECK-BOOKING.md`](docs/P1-ENGLISH-CHECK-BOOKING.md): diagnóstico anônimo, qualificação de leads e arquitetura de agenda pública.
+- [`docs/NERYA-VISUAL-SYSTEM.md`](docs/NERYA-VISUAL-SYSTEM.md): tokens, profundidade, motion e regras da atmosfera Nerya Night.
 
 ## Deploy no Render (Web Service Node)
 

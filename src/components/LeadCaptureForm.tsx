@@ -140,7 +140,7 @@ export function LeadCaptureForm({ intent, title, description }: LeadCaptureFormP
   if (continuation) {
     return (
       <section
-        className="space-y-5 rounded-xl border border-brand/30 bg-card p-6"
+        className="surface-premium space-y-5 rounded-xl border border-brand/30 bg-card p-6"
         aria-live="polite"
       >
         <p className="text-xs font-semibold uppercase tracking-widest text-brand-light">
@@ -152,7 +152,10 @@ export function LeadCaptureForm({ intent, title, description }: LeadCaptureFormP
           necessária.
         </p>
         <div className="grid gap-3 sm:grid-cols-2">
-          <Button asChild className="bg-brand text-primary-foreground hover:bg-brand-dark">
+          <Button
+            asChild
+            className="cta-primary bg-brand text-primary-foreground hover:bg-brand-dark"
+          >
             <Link to="/agendar/horario">
               <CalendarDays className="h-4 w-4" aria-hidden="true" /> Escolher horário
             </Link>
@@ -180,7 +183,7 @@ export function LeadCaptureForm({ intent, title, description }: LeadCaptureFormP
       ref={formRef}
       onSubmit={submit}
       aria-busy={loading}
-      className="space-y-4 rounded-lg border border-border/60 bg-card p-5 md:p-6"
+      className="surface-premium space-y-4 rounded-lg border border-border/60 bg-card p-5 md:p-6"
       noValidate
     >
       <div>
@@ -310,7 +313,7 @@ export function LeadCaptureForm({ intent, title, description }: LeadCaptureFormP
       <Button
         type="submit"
         disabled={loading}
-        className="w-full bg-brand text-primary-foreground hover:bg-brand-dark"
+        className="cta-primary w-full bg-brand text-primary-foreground hover:bg-brand-dark"
       >
         {loading ? (
           "Enviando..."

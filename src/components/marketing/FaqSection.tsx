@@ -25,7 +25,7 @@ const FAQ_ITEMS = [
   {
     question: "Quem será meu professor?",
     answer:
-      "Você é acompanhado pelo mesmo professor ao longo do processo. O perfil profissional completo está sendo atualizado na seção acima, sem certificações ou experiências inventadas.",
+      "Você é acompanhado pelo mesmo professor ao longo do processo, o que ajuda a manter continuidade nos objetivos, no feedback e na evolução das aulas.",
   },
   {
     question: "Como funciona a aula experimental?",
@@ -76,7 +76,7 @@ const FAQ_ITEMS = [
 
 export function FaqSection() {
   return (
-    <section id="faq" className="border-y border-border bg-[color:var(--background-soft)]">
+    <section id="faq" className="night-section border-y border-border" data-reveal>
       <div className="container-page grid gap-10 py-20 md:grid-cols-[0.7fr_1.3fr] md:gap-16 md:py-24">
         <div>
           <p className="text-xs font-semibold uppercase tracking-widest text-brand-light">
@@ -91,7 +91,7 @@ export function FaqSection() {
         <Accordion
           type="single"
           collapsible
-          className="border-t border-border"
+          className="surface-premium rounded-xl border border-border px-5"
           onValueChange={(value) => {
             if (value) trackEvent("faq_open", { question_id: value });
           }}

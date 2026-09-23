@@ -22,7 +22,7 @@ export const Route = createFileRoute("/contato")({
 function Contact() {
   return (
     <PublicLayout>
-      <section className="container-page grid max-w-4xl gap-10 py-16 md:grid-cols-2">
+      <section className="container-page grid max-w-4xl gap-10 py-16 md:grid-cols-2" data-reveal>
         <div>
           <p className="text-xs uppercase tracking-widest text-primary">Contato</p>
           <h1 className="mt-2 font-display text-5xl leading-tight">Fale com a gente.</h1>

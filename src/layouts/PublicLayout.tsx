@@ -6,6 +6,7 @@ import { siteConfig } from "@/config/site";
 import { cn } from "@/lib/utils";
 import { trackEvent } from "@/lib/analytics";
 import { buildWhatsAppContactUrl } from "@/utils/contact";
+import { ScrollRevealObserver } from "@/components/visual/ScrollRevealObserver";
 
 const NAV = [
   { to: "/", label: "Início" },
@@ -48,18 +49,19 @@ export function PublicLayout({ children }: { children: ReactNode }) {
   }, []);
 
   return (
-    <div className="flex min-h-screen flex-col bg-background">
+    <div className="nerya-night flex min-h-screen flex-col bg-background">
+      <ScrollRevealObserver />
       <header
         className={cn(
-          "sticky top-0 z-40 border-b transition-colors duration-200",
+          "sticky top-0 z-40 border-b transition-[background-color,border-color,box-shadow] duration-300",
           scrolled
-            ? "border-border bg-background/85 backdrop-blur-md"
+            ? "border-brand-light/15 bg-background/88 shadow-[0_14px_38px_-30px_var(--glow-blue-medium)] backdrop-blur-md"
             : "border-transparent bg-background/60 backdrop-blur",
         )}
       >
         <div className="container-page flex h-16 items-center justify-between gap-6 md:h-[72px]">
           <Link to="/" className="flex shrink-0 items-center" aria-label="Nerya — Início">
-            <Logo />
+            <Logo className="logo-night" />
           </Link>
 
           <nav className="hidden items-center gap-1 lg:flex">
@@ -67,10 +69,9 @@ export function PublicLayout({ children }: { children: ReactNode }) {
               <Link
                 key={item.to}
                 to={item.to}
-                className="relative rounded-md px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+                className="nav-link-night relative rounded-md px-3 py-2 text-sm font-medium text-muted-foreground transition-colors duration-200 hover:text-foreground"
                 activeProps={{
-                  className:
-                    "text-foreground after:absolute after:left-3 after:right-3 after:-bottom-0.5 after:h-[2px] after:rounded-full after:bg-brand",
+                  className: "text-foreground",
                 }}
                 activeOptions={{ exact: item.to === "/" }}
               >
@@ -83,7 +84,7 @@ export function PublicLayout({ children }: { children: ReactNode }) {
             <Button
               asChild
               size="sm"
-              className="bg-brand text-primary-foreground hover:bg-brand-dark"
+              className="cta-primary bg-brand text-primary-foreground hover:bg-brand-dark"
             >
               <Link
                 to="/agendar"
@@ -137,7 +138,7 @@ export function PublicLayout({ children }: { children: ReactNode }) {
 
       <main className="flex-1">{children}</main>
 
-      <footer className="border-t border-border bg-[color:var(--background-soft)]">
+      <footer className="night-section border-t border-border">
         <div className="container-page grid gap-10 py-14 md:grid-cols-4">
           <div>
             <Logo className="text-3xl" />

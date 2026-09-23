@@ -15,6 +15,7 @@ import type { Plan } from "@/types";
 import { siteConfig } from "@/config/site";
 import { trackEvent } from "@/lib/analytics";
 import { buildWhatsAppContactUrl } from "@/utils/contact";
+import { SpotlightCard } from "@/components/visual/SpotlightCard";
 
 const PLANS_TIMEOUT_MS = 8_000;
 
@@ -168,10 +169,11 @@ function Plans() {
                 );
 
                 return (
-                  <article
+                  <SpotlightCard
+                    as="article"
                     key={plan.id}
                     className={cn(
-                      "relative flex min-w-0 flex-col rounded-lg border bg-plan-panel p-5 shadow-sm transition-colors",
+                      "relative flex min-w-0 flex-col rounded-lg border bg-plan-panel p-5 shadow-sm",
                       plan.featured
                         ? "border-plan-primary bg-plan-panel-soft shadow-[0_18px_45px_-34px_var(--plan-primary-dark)]"
                         : "border-plan-border",
@@ -179,7 +181,7 @@ function Plans() {
                     )}
                   >
                     {plan.featured && (
-                      <Badge className="absolute -top-3 left-4 gap-1 bg-plan-primary text-primary-foreground">
+                      <Badge className="neon-badge absolute -top-3 left-4 gap-1 bg-plan-primary text-primary-foreground">
                         <Sparkles className="h-3 w-3" aria-hidden="true" />
                         Recomendado
                       </Badge>
@@ -254,7 +256,7 @@ function Plans() {
                       <Button
                         type="button"
                         className={cn(
-                          "min-h-11 w-full whitespace-normal bg-plan-primary px-3 text-center text-xs leading-tight text-primary-foreground hover:bg-plan-primary-dark",
+                          "cta-primary min-h-11 w-full whitespace-normal bg-plan-primary px-3 text-center text-xs leading-tight text-primary-foreground hover:bg-plan-primary-dark",
                           plan.featured && "bg-plan-primary-dark hover:bg-plan-primary",
                         )}
                         disabled={disabled}
@@ -315,7 +317,7 @@ function Plans() {
                         </Button>
                       )}
                     </div>
-                  </article>
+                  </SpotlightCard>
                 );
               })}
             </div>
