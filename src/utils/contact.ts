@@ -65,8 +65,12 @@ export function formatLeadMessage(input: LeadMessageInput): string {
 }
 
 export function buildWhatsAppUrl(input: LeadMessageInput): string | null {
+  return buildWhatsAppContactUrl(formatLeadMessage(input));
+}
+
+export function buildWhatsAppContactUrl(message: string): string | null {
   const target = normalizeWhatsAppNumber(env.publicWhatsAppNumber);
   if (!target) return null;
-  const text = encodeURIComponent(formatLeadMessage(input));
+  const text = encodeURIComponent(message.trim());
   return `https://wa.me/${target}?text=${text}`;
 }

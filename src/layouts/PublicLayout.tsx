@@ -1,10 +1,11 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import { type ReactNode, useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Instagram, Mail, Menu, X } from "lucide-react";
+import { Instagram, Mail, Menu, MessageCircle, X } from "lucide-react";
 import { siteConfig } from "@/config/site";
 import { cn } from "@/lib/utils";
 import { trackEvent } from "@/lib/analytics";
+import { buildWhatsAppContactUrl } from "@/utils/contact";
 
 const NAV = [
   { to: "/", label: "Início" },
@@ -29,6 +30,9 @@ export function PublicLayout({ children }: { children: ReactNode }) {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const whatsappUrl = buildWhatsAppContactUrl(
+    "Olá, gostaria de falar com a Nerya sobre as aulas de inglês.",
+  );
 
   useEffect(() => setOpen(false), [pathname]);
 
@@ -226,6 +230,23 @@ export function PublicLayout({ children }: { children: ReactNode }) {
           </div>
         </div>
       </footer>
+
+      {whatsappUrl && (
+        <a
+          href={whatsappUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Falar com a Nerya pelo WhatsApp"
+          title="Falar pelo WhatsApp"
+          onClick={() =>
+            trackEvent("whatsapp_click", { location: "floating_button", path: pathname })
+          }
+          className="fixed bottom-5 right-4 z-50 grid h-14 w-14 place-items-center rounded-full border-4 border-white/80 bg-[#25D366] text-white shadow-[0_10px_30px_rgba(0,0,0,0.28)] transition duration-200 hover:scale-105 hover:bg-[#20bd5a] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#25D366] focus-visible:ring-offset-2 md:bottom-7 md:right-7 md:h-16 md:w-16"
+        >
+          <MessageCircle className="h-7 w-7 md:h-8 md:w-8" strokeWidth={2.5} aria-hidden="true" />
+          <span className="sr-only">WhatsApp</span>
+        </a>
+      )}
     </div>
   );
 }

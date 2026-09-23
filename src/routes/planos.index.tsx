@@ -5,7 +5,7 @@ import { planRepository } from "@/repositories";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useEffect, useRef, useState } from "react";
-import { Check, Loader2, Sparkles } from "lucide-react";
+import { Check, Loader2, MessageCircle, Sparkles } from "lucide-react";
 import { formatPriceBRL } from "@/utils/format";
 import { DemoBanner } from "@/components/DemoBanner";
 import { EmptyState, ErrorState, LoadingBlock } from "@/components/States";
@@ -14,6 +14,7 @@ import { toast } from "sonner";
 import type { Plan } from "@/types";
 import { siteConfig } from "@/config/site";
 import { trackEvent } from "@/lib/analytics";
+import { buildWhatsAppContactUrl } from "@/utils/contact";
 
 const PLANS_TIMEOUT_MS = 8_000;
 
@@ -162,6 +163,9 @@ function Plans() {
                 const priceAria = plan.originalMonthlyPriceCents
                   ? `${formatPriceBRL(plan.monthlyPriceCents)} por mês, de ${formatPriceBRL(plan.originalMonthlyPriceCents)}`
                   : `${formatPriceBRL(plan.monthlyPriceCents)}`;
+                const planWhatsappUrl = buildWhatsAppContactUrl(
+                  `Olá, tenho interesse em adquirir o plano ${plan.name} da Nerya (${frequencyLabel(plan)}, ${formatPriceBRL(plan.monthlyPriceCents)}). Gostaria de saber como continuar.`,
+                );
 
                 return (
                   <article
@@ -246,29 +250,71 @@ function Plans() {
                       ))}
                     </ul>
 
-                    <Button
-                      type="button"
-                      className={cn(
-                        "mt-6 min-h-11 w-full whitespace-normal bg-plan-primary px-3 text-center text-xs leading-tight text-primary-foreground hover:bg-plan-primary-dark",
-                        plan.featured && "bg-plan-primary-dark hover:bg-plan-primary",
-                      )}
-                      disabled={disabled}
-                      onClick={() => {
-                        trackEvent("plan_select", { plan_id: plan.id, plan_name: plan.name });
-                        trackEvent("cta_trial_click", { location: "plans", plan_id: plan.id });
-                        choosePlan.mutate(plan);
-                      }}
-                      aria-label={`Marcar aula experimental após conhecer o plano ${plan.name}, ${priceAria}`}
-                    >
-                      {isChoosing ? (
-                        <>
-                          <Loader2 className="mr-2 h-4 w-4 animate-spin" aria-hidden="true" />
-                          Selecionando
-                        </>
+                    <div className="mt-6 grid gap-2">
+                      <Button
+                        type="button"
+                        className={cn(
+                          "min-h-11 w-full whitespace-normal bg-plan-primary px-3 text-center text-xs leading-tight text-primary-foreground hover:bg-plan-primary-dark",
+                          plan.featured && "bg-plan-primary-dark hover:bg-plan-primary",
+                        )}
+                        disabled={disabled}
+                        onClick={() => {
+                          trackEvent("plan_select", { plan_id: plan.id, plan_name: plan.name });
+                          trackEvent("cta_trial_click", { location: "plans", plan_id: plan.id });
+                          choosePlan.mutate(plan);
+                        }}
+                        aria-label={`Marcar aula experimental após conhecer o plano ${plan.name}, ${priceAria}`}
+                      >
+                        {isChoosing ? (
+                          <>
+                            <Loader2 className="mr-2 h-4 w-4 animate-spin" aria-hidden="true" />
+                            Selecionando
+                          </>
+                        ) : (
+                          "Aula experimental"
+                        )}
+                      </Button>
+
+                      {planWhatsappUrl ? (
+                        <Button
+                          asChild
+                          type="button"
+                          className="min-h-11 w-full whitespace-normal bg-[#25D366] px-3 text-center text-xs leading-tight text-white hover:bg-[#20bd5a]"
+                        >
+                          <a
+                            href={planWhatsappUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            aria-label={`Adquirir o plano ${plan.name} pelo WhatsApp`}
+                            onClick={() => {
+                              trackEvent("plan_select", {
+                                plan_id: plan.id,
+                                plan_name: plan.name,
+                                destination: "whatsapp",
+                              });
+                              trackEvent("whatsapp_click", {
+                                location: "plans",
+                                plan_id: plan.id,
+                              });
+                            }}
+                          >
+                            <MessageCircle className="h-4 w-4" aria-hidden="true" />
+                            Adquirir plano
+                          </a>
+                        </Button>
                       ) : (
-                        "Aula experimental"
+                        <Button
+                          type="button"
+                          variant="outline"
+                          disabled
+                          title="Configure o WhatsApp institucional para habilitar"
+                          className="min-h-11 w-full whitespace-normal px-3 text-center text-xs leading-tight"
+                        >
+                          <MessageCircle className="h-4 w-4" aria-hidden="true" />
+                          Adquirir plano
+                        </Button>
                       )}
-                    </Button>
+                    </div>
                   </article>
                 );
               })}
