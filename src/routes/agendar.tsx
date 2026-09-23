@@ -10,7 +10,7 @@ export const Route = createFileRoute("/agendar")({
       {
         name: "description",
         content:
-          "Solicite sua aula experimental gratuita de inglês. Seus dados são enviados por e-mail e o atendimento continua no WhatsApp.",
+          "Solicite sua aula experimental gratuita de inglês e escolha entre consultar horários ou continuar pelo WhatsApp.",
       },
     ],
     links: [{ rel: "canonical", href: `${siteConfig.url}/agendar` }],
@@ -26,7 +26,7 @@ function SchedulePublic() {
           <LeadCaptureForm
             intent="scheduling"
             title="Marque sua aula experimental grátis"
-            description="Conte um pouco sobre você. Ao enviar, seus dados chegam automaticamente por e-mail e o WhatsApp é aberto para combinar sua aula gratuita."
+            description="Conte um pouco sobre você. Ao enviar, seus dados chegam à Nerya e você escolhe como prefere continuar."
           />
         </div>
       </section>

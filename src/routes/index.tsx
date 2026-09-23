@@ -102,7 +102,7 @@ function HomePage() {
                 variant="secondary"
                 className="border border-border bg-transparent hover:bg-surface"
               >
-                <Link to="/planos">Ver planos</Link>
+                <Link to="/nivel">Descobrir meu nível</Link>
               </Button>
             </div>
             <ul className="mt-10 flex flex-wrap items-center gap-x-6 gap-y-3 text-sm text-muted-foreground">
@@ -137,7 +137,7 @@ function HomePage() {
                   na prática.
                 </p>
                 <p className="mt-4 text-sm text-muted-foreground">
-                  Preencha o formulário. Seus dados seguem por e-mail e o WhatsApp abre em seguida.
+                  Preencha o formulário e escolha entre consultar horários ou continuar no WhatsApp.
                 </p>
               </div>
 
@@ -179,6 +179,35 @@ function HomePage() {
               <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-brand" /> {f}
             </div>
           ))}
+        </div>
+      </section>
+
+      <section className="border-b border-border bg-[color:var(--background-soft)]">
+        <div className="container-page grid items-center gap-8 py-16 md:grid-cols-[1fr_auto] md:py-20">
+          <div className="max-w-2xl">
+            <p className="text-xs font-semibold uppercase tracking-widest text-brand-light">
+              English Check
+            </p>
+            <h2 className="mt-3 text-foreground">
+              Descubra seu ponto de partida em poucos minutos.
+            </h2>
+            <p className="mt-4 text-muted-foreground">
+              Um diagnóstico gratuito de 12 etapas, com resultado de A1 a C1 e recomendações para
+              seu objetivo. Sem cadastro e sem pedir e-mail antes do resultado.
+            </p>
+            <p className="mt-3 text-xs text-muted-foreground">
+              Resultado orientativo; não é uma certificação oficial.
+            </p>
+          </div>
+          <Button
+            asChild
+            size="lg"
+            className="bg-brand text-primary-foreground hover:bg-brand-dark"
+          >
+            <Link to="/nivel">
+              Fazer English Check <ArrowRight className="h-4 w-4" />
+            </Link>
+          </Button>
         </div>
       </section>
 

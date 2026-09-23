@@ -99,6 +99,30 @@ describe("handleLeadRequest", () => {
     expect(leadEmail.text).not.toContain("Disponibilidade:");
   });
 
+  it("accepts an optional message and includes assessment qualification", async () => {
+    const emailProvider = provider();
+    const response = await handleLeadRequest(
+      request(
+        validPayload({
+          intent: "assessment_result",
+          preferredChannel: "email",
+          message: undefined,
+          goal: "work",
+          perceivedLevel: "intermediate",
+          estimatedLevel: "B1",
+        }),
+      ),
+      env,
+      { emailProvider, now: () => new Date("2026-08-05T20:00:03.000Z") },
+    );
+
+    expect(response.status).toBe(201);
+    const [leadEmail] = emailProvider.send.mock.calls[0]!;
+    expect(leadEmail.text).toContain("Nivel estimado: B1");
+    const [confirmation] = emailProvider.send.mock.calls[1]!;
+    expect(confirmation.subject).toContain("B1");
+  });
+
   it("rejects an invalid email", async () => {
     const emailProvider = provider();
     const response = await handleLeadRequest(request(validPayload({ email: "invalid" })), env, {

@@ -13,6 +13,7 @@ import { Route as SobreRouteImport } from './routes/sobre'
 import { Route as RedefinirSenhaRouteImport } from './routes/redefinir-senha'
 import { Route as RecuperarSenhaRouteImport } from './routes/recuperar-senha'
 import { Route as PrivacidadeRouteImport } from './routes/privacidade'
+import { Route as NivelRouteImport } from './routes/nivel'
 import { Route as EntrarRouteImport } from './routes/entrar'
 import { Route as ContatoRouteImport } from './routes/contato'
 import { Route as ComoFuncionaRouteImport } from './routes/como-funciona'
@@ -27,6 +28,8 @@ import { Route as PlanosSucessoRouteImport } from './routes/planos.sucesso'
 import { Route as PlanosCheckoutRouteImport } from './routes/planos.checkout'
 import { Route as CursosSlugRouteImport } from './routes/cursos.$slug'
 import { Route as ConteudosSlugRouteImport } from './routes/conteudos.$slug'
+import { Route as AgendarHorarioRouteImport } from './routes/agendar.horario'
+import { Route as AgendarConfirmadoRouteImport } from './routes/agendar.confirmado'
 import { Route as AlunoAlunoIndexRouteImport } from './routes/_aluno.aluno.index'
 import { Route as CertificadosValidarCodigoRouteImport } from './routes/certificados.validar.$codigo'
 import { Route as AlunoAlunoPlanoRouteImport } from './routes/_aluno.aluno.plano'
@@ -61,6 +64,11 @@ const RecuperarSenhaRoute = RecuperarSenhaRouteImport.update({
 const PrivacidadeRoute = PrivacidadeRouteImport.update({
   id: '/privacidade',
   path: '/privacidade',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NivelRoute = NivelRouteImport.update({
+  id: '/nivel',
+  path: '/nivel',
   getParentRoute: () => rootRouteImport,
 } as any)
 const EntrarRoute = EntrarRouteImport.update({
@@ -131,6 +139,16 @@ const ConteudosSlugRoute = ConteudosSlugRouteImport.update({
   id: '/conteudos/$slug',
   path: '/conteudos/$slug',
   getParentRoute: () => rootRouteImport,
+} as any)
+const AgendarHorarioRoute = AgendarHorarioRouteImport.update({
+  id: '/horario',
+  path: '/horario',
+  getParentRoute: () => AgendarRoute,
+} as any)
+const AgendarConfirmadoRoute = AgendarConfirmadoRouteImport.update({
+  id: '/confirmado',
+  path: '/confirmado',
+  getParentRoute: () => AgendarRoute,
 } as any)
 const AlunoAlunoIndexRoute = AlunoAlunoIndexRouteImport.update({
   id: '/aluno/',
@@ -216,15 +234,18 @@ const AlunoAlunoCursosSlugAulasLessonIdRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/agendar': typeof AgendarRoute
+  '/agendar': typeof AgendarRouteWithChildren
   '/cadastrar': typeof CadastrarRoute
   '/como-funciona': typeof ComoFuncionaRoute
   '/contato': typeof ContatoRoute
   '/entrar': typeof EntrarRoute
+  '/nivel': typeof NivelRoute
   '/privacidade': typeof PrivacidadeRoute
   '/recuperar-senha': typeof RecuperarSenhaRoute
   '/redefinir-senha': typeof RedefinirSenhaRoute
   '/sobre': typeof SobreRoute
+  '/agendar/confirmado': typeof AgendarConfirmadoRoute
+  '/agendar/horario': typeof AgendarHorarioRoute
   '/conteudos/$slug': typeof ConteudosSlugRoute
   '/cursos/$slug': typeof CursosSlugRoute
   '/planos/checkout': typeof PlanosCheckoutRoute
@@ -250,15 +271,18 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/agendar': typeof AgendarRoute
+  '/agendar': typeof AgendarRouteWithChildren
   '/cadastrar': typeof CadastrarRoute
   '/como-funciona': typeof ComoFuncionaRoute
   '/contato': typeof ContatoRoute
   '/entrar': typeof EntrarRoute
+  '/nivel': typeof NivelRoute
   '/privacidade': typeof PrivacidadeRoute
   '/recuperar-senha': typeof RecuperarSenhaRoute
   '/redefinir-senha': typeof RedefinirSenhaRoute
   '/sobre': typeof SobreRoute
+  '/agendar/confirmado': typeof AgendarConfirmadoRoute
+  '/agendar/horario': typeof AgendarHorarioRoute
   '/conteudos/$slug': typeof ConteudosSlugRoute
   '/cursos/$slug': typeof CursosSlugRoute
   '/planos/checkout': typeof PlanosCheckoutRoute
@@ -286,15 +310,18 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_aluno': typeof AlunoRouteWithChildren
-  '/agendar': typeof AgendarRoute
+  '/agendar': typeof AgendarRouteWithChildren
   '/cadastrar': typeof CadastrarRoute
   '/como-funciona': typeof ComoFuncionaRoute
   '/contato': typeof ContatoRoute
   '/entrar': typeof EntrarRoute
+  '/nivel': typeof NivelRoute
   '/privacidade': typeof PrivacidadeRoute
   '/recuperar-senha': typeof RecuperarSenhaRoute
   '/redefinir-senha': typeof RedefinirSenhaRoute
   '/sobre': typeof SobreRoute
+  '/agendar/confirmado': typeof AgendarConfirmadoRoute
+  '/agendar/horario': typeof AgendarHorarioRoute
   '/conteudos/$slug': typeof ConteudosSlugRoute
   '/cursos/$slug': typeof CursosSlugRoute
   '/planos/checkout': typeof PlanosCheckoutRoute
@@ -327,10 +354,13 @@ export interface FileRouteTypes {
     | '/como-funciona'
     | '/contato'
     | '/entrar'
+    | '/nivel'
     | '/privacidade'
     | '/recuperar-senha'
     | '/redefinir-senha'
     | '/sobre'
+    | '/agendar/confirmado'
+    | '/agendar/horario'
     | '/conteudos/$slug'
     | '/cursos/$slug'
     | '/planos/checkout'
@@ -361,10 +391,13 @@ export interface FileRouteTypes {
     | '/como-funciona'
     | '/contato'
     | '/entrar'
+    | '/nivel'
     | '/privacidade'
     | '/recuperar-senha'
     | '/redefinir-senha'
     | '/sobre'
+    | '/agendar/confirmado'
+    | '/agendar/horario'
     | '/conteudos/$slug'
     | '/cursos/$slug'
     | '/planos/checkout'
@@ -396,10 +429,13 @@ export interface FileRouteTypes {
     | '/como-funciona'
     | '/contato'
     | '/entrar'
+    | '/nivel'
     | '/privacidade'
     | '/recuperar-senha'
     | '/redefinir-senha'
     | '/sobre'
+    | '/agendar/confirmado'
+    | '/agendar/horario'
     | '/conteudos/$slug'
     | '/cursos/$slug'
     | '/planos/checkout'
@@ -427,11 +463,12 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AlunoRoute: typeof AlunoRouteWithChildren
-  AgendarRoute: typeof AgendarRoute
+  AgendarRoute: typeof AgendarRouteWithChildren
   CadastrarRoute: typeof CadastrarRoute
   ComoFuncionaRoute: typeof ComoFuncionaRoute
   ContatoRoute: typeof ContatoRoute
   EntrarRoute: typeof EntrarRoute
+  NivelRoute: typeof NivelRoute
   PrivacidadeRoute: typeof PrivacidadeRoute
   RecuperarSenhaRoute: typeof RecuperarSenhaRoute
   RedefinirSenhaRoute: typeof RedefinirSenhaRoute
@@ -474,6 +511,13 @@ declare module '@tanstack/react-router' {
       path: '/privacidade'
       fullPath: '/privacidade'
       preLoaderRoute: typeof PrivacidadeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/nivel': {
+      id: '/nivel'
+      path: '/nivel'
+      fullPath: '/nivel'
+      preLoaderRoute: typeof NivelRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/entrar': {
@@ -573,6 +617,20 @@ declare module '@tanstack/react-router' {
       fullPath: '/conteudos/$slug'
       preLoaderRoute: typeof ConteudosSlugRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/agendar/horario': {
+      id: '/agendar/horario'
+      path: '/horario'
+      fullPath: '/agendar/horario'
+      preLoaderRoute: typeof AgendarHorarioRouteImport
+      parentRoute: typeof AgendarRoute
+    }
+    '/agendar/confirmado': {
+      id: '/agendar/confirmado'
+      path: '/confirmado'
+      fullPath: '/agendar/confirmado'
+      preLoaderRoute: typeof AgendarConfirmadoRouteImport
+      parentRoute: typeof AgendarRoute
     }
     '/_aluno/aluno/': {
       id: '/_aluno/aluno/'
@@ -719,14 +777,28 @@ const AlunoRouteChildren: AlunoRouteChildren = {
 
 const AlunoRouteWithChildren = AlunoRoute._addFileChildren(AlunoRouteChildren)
 
+interface AgendarRouteChildren {
+  AgendarConfirmadoRoute: typeof AgendarConfirmadoRoute
+  AgendarHorarioRoute: typeof AgendarHorarioRoute
+}
+
+const AgendarRouteChildren: AgendarRouteChildren = {
+  AgendarConfirmadoRoute: AgendarConfirmadoRoute,
+  AgendarHorarioRoute: AgendarHorarioRoute,
+}
+
+const AgendarRouteWithChildren =
+  AgendarRoute._addFileChildren(AgendarRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AlunoRoute: AlunoRouteWithChildren,
-  AgendarRoute: AgendarRoute,
+  AgendarRoute: AgendarRouteWithChildren,
   CadastrarRoute: CadastrarRoute,
   ComoFuncionaRoute: ComoFuncionaRoute,
   ContatoRoute: ContatoRoute,
   EntrarRoute: EntrarRoute,
+  NivelRoute: NivelRoute,
   PrivacidadeRoute: PrivacidadeRoute,
   RecuperarSenhaRoute: RecuperarSenhaRoute,
   RedefinirSenhaRoute: RedefinirSenhaRoute,

@@ -10,6 +10,7 @@ const NAV = [
   { to: "/", label: "Início" },
   { to: "/planos", label: "Planos" },
   { to: "/agendar", label: "Aula experimental" },
+  { to: "/nivel", label: "Teste de nível" },
   { to: "/como-funciona", label: "Como funciona" },
   { to: "/contato", label: "Contato" },
 ] as const;
@@ -154,6 +155,11 @@ export function PublicLayout({ children }: { children: ReactNode }) {
               <li>
                 <Link to="/agendar" className="transition hover:text-foreground">
                   Aula experimental
+                </Link>
+              </li>
+              <li>
+                <Link to="/nivel" className="transition hover:text-foreground">
+                  English Check
                 </Link>
               </li>
             </ul>

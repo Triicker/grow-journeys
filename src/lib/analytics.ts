@@ -12,7 +12,21 @@ export type AnalyticsEventName =
   | "contact_click"
   | "faq_open"
   | "teacher_section_view"
-  | "testimonial_view";
+  | "testimonial_view"
+  | "english_check_view"
+  | "assessment_start"
+  | "assessment_answer"
+  | "assessment_complete"
+  | "assessment_result_view"
+  | "assessment_trial_click"
+  | "assessment_email_result_click"
+  | "booking_start"
+  | "booking_date_select"
+  | "booking_time_select"
+  | "booking_submit"
+  | "booking_success"
+  | "booking_error"
+  | "booking_whatsapp_fallback";
 
 export type AnalyticsProperties = Record<string, string | number | boolean | null | undefined>;
 

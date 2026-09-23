@@ -1,4 +1,12 @@
-import type { ApiResponse, LeadIntent, LeadPreferredChannel, LeadSubmissionResult } from "@/types";
+import type {
+  ApiResponse,
+  LeadEstimatedLevel,
+  LeadGoal,
+  LeadIntent,
+  LeadPerceivedLevel,
+  LeadPreferredChannel,
+  LeadSubmissionResult,
+} from "@/types";
 import type { LeadEmailProvider } from "./resend";
 import { resendLeadEmailProvider } from "./resend";
 
@@ -12,6 +20,9 @@ type RawLeadPayload = {
   preferredChannel?: unknown;
   preferredSchedule?: unknown;
   message?: unknown;
+  goal?: unknown;
+  perceivedLevel?: unknown;
+  estimatedLevel?: unknown;
   subject?: unknown;
   origin?: unknown;
   website?: unknown;
@@ -25,7 +36,10 @@ type NormalizedLead = {
   whatsapp?: string;
   preferredChannel: LeadPreferredChannel;
   preferredSchedule?: string;
-  message: string;
+  message?: string;
+  goal?: LeadGoal;
+  perceivedLevel?: LeadPerceivedLevel;
+  estimatedLevel?: LeadEstimatedLevel;
   origin?: string;
   renderedAt?: string;
 };
@@ -59,9 +73,31 @@ const FIELD_LIMITS = {
   whatsapp: 40,
   preferredSchedule: 160,
   message: 2_000,
+  goal: 40,
+  perceivedLevel: 40,
+  estimatedLevel: 4,
   origin: 500,
   website: 200,
 } as const;
+
+const GOAL_LABELS: Record<LeadGoal, string> = {
+  conversation: "Conversacao",
+  work: "Trabalho",
+  interview: "Entrevista",
+  travel: "Viagem",
+  general: "Ingles geral",
+  exams: "Provas/certificacoes",
+  technology: "Tecnologia",
+  other: "Outro",
+};
+
+const PERCEIVED_LEVEL_LABELS: Record<LeadPerceivedLevel, string> = {
+  never: "Nunca estudei",
+  basic: "Basico",
+  intermediate: "Intermediario",
+  advanced: "Avancado",
+  unsure: "Nao sei",
+};
 
 const rateLimitBuckets = new Map<string, RateLimitBucket>();
 
@@ -190,7 +226,10 @@ function validatePayload(
   const fields: Record<string, string> = {};
   const fullName = normalizeRequired(payload.fullName, FIELD_LIMITS.fullName);
   const email = normalizeRequired(payload.email, FIELD_LIMITS.email);
-  const message = normalizeRequired(payload.message, FIELD_LIMITS.message);
+  const message = normalizeOptional(payload.message, FIELD_LIMITS.message);
+  const goal = normalizeOptional(payload.goal, FIELD_LIMITS.goal);
+  const perceivedLevel = normalizeOptional(payload.perceivedLevel, FIELD_LIMITS.perceivedLevel);
+  const estimatedLevel = normalizeOptional(payload.estimatedLevel, FIELD_LIMITS.estimatedLevel);
   const whatsapp = normalizeOptional(payload.whatsapp, FIELD_LIMITS.whatsapp);
   const preferredSchedule = normalizeOptional(
     payload.preferredSchedule,
@@ -201,10 +240,8 @@ function validatePayload(
 
   if (!fullName) fields.fullName = "Informe seu nome.";
   if (!email || !isValidEmail(email)) fields.email = "Informe um e-mail valido.";
-  if (!message) fields.message = "Informe uma mensagem.";
-
   const intent = payload.intent;
-  if (intent !== "contact" && intent !== "scheduling") {
+  if (intent !== "contact" && intent !== "scheduling" && intent !== "assessment_result") {
     fields.intent = "Origem invalida.";
   }
 
@@ -212,6 +249,24 @@ function validatePayload(
   if (preferredChannel !== "email" && preferredChannel !== "whatsapp") {
     fields.preferredChannel = "Canal preferido invalido.";
   }
+
+  const goals = [
+    "conversation",
+    "work",
+    "interview",
+    "travel",
+    "general",
+    "exams",
+    "technology",
+    "other",
+  ];
+  const perceivedLevels = ["never", "basic", "intermediate", "advanced", "unsure"];
+  const estimatedLevels = ["A1", "A2", "B1", "B2", "C1"];
+  if (goal && !goals.includes(goal)) fields.goal = "Objetivo invalido.";
+  if (perceivedLevel && !perceivedLevels.includes(perceivedLevel))
+    fields.perceivedLevel = "Nivel percebido invalido.";
+  if (estimatedLevel && !estimatedLevels.includes(estimatedLevel))
+    fields.estimatedLevel = "Nivel estimado invalido.";
 
   if (renderedAt && isTooFast(renderedAt, now)) {
     fields.form = "Aguarde um instante antes de enviar novamente.";
@@ -230,7 +285,10 @@ function validatePayload(
       whatsapp,
       preferredChannel: preferredChannel as LeadPreferredChannel,
       preferredSchedule,
-      message: message!,
+      message,
+      goal: goal as LeadGoal | undefined,
+      perceivedLevel: perceivedLevel as LeadPerceivedLevel | undefined,
+      estimatedLevel: estimatedLevel as LeadEstimatedLevel | undefined,
       origin,
       renderedAt,
     },
@@ -246,7 +304,12 @@ function buildLeadEmail(
   html: string;
   text: string;
 } {
-  const intentLabel = lead.intent === "scheduling" ? "Aula experimental gratuita" : "Contato";
+  const intentLabel =
+    lead.intent === "scheduling"
+      ? "Aula experimental gratuita"
+      : lead.intent === "assessment_result"
+        ? "Resultado do English Check"
+        : "Contato";
   const channelLabel = lead.preferredChannel === "whatsapp" ? "WhatsApp" : "E-mail";
   const subject = `Nerya - ${intentLabel} pelo site`;
   const logoUrl = `${siteOrigin}/logoo.png`;
@@ -259,6 +322,10 @@ function buildLeadEmail(
     ["Pagina de origem", lead.origin ?? "Nao informada"],
     ["Recebido em", createdAt],
   ];
+  if (lead.goal) rows.splice(4, 0, ["Objetivo", GOAL_LABELS[lead.goal]]);
+  if (lead.perceivedLevel)
+    rows.splice(5, 0, ["Nivel percebido", PERCEIVED_LEVEL_LABELS[lead.perceivedLevel]]);
+  if (lead.estimatedLevel) rows.splice(6, 0, ["Nivel estimado", lead.estimatedLevel]);
   if (lead.preferredSchedule) {
     rows.splice(5, 0, ["Disponibilidade", lead.preferredSchedule]);
   }
@@ -287,12 +354,19 @@ function buildLeadEmail(
       htmlRows,
       "</table>",
       '<h2 style="margin:26px 0 8px;font-size:18px;color:#111827">Mensagem</h2>',
-      `<p style="margin:0;white-space:pre-wrap;color:#374151">${escapeHtml(lead.message)}</p>`,
+      `<p style="margin:0;white-space:pre-wrap;color:#374151">${escapeHtml(lead.message ?? "Nao informada")}</p>`,
       "</div>",
       "</div>",
       "</div>",
     ].join(""),
-    text: ["Nerya - novo lead recebido", "", textRows, "", "Mensagem:", lead.message].join("\n"),
+    text: [
+      "Nerya - novo lead recebido",
+      "",
+      textRows,
+      "",
+      "Mensagem:",
+      lead.message ?? "Nao informada",
+    ].join("\n"),
   };
 }
 
@@ -305,7 +379,11 @@ function buildConfirmationEmail(
   text: string;
 } {
   const intentLabel =
-    lead.intent === "scheduling" ? "solicitação de aula experimental gratuita" : "mensagem";
+    lead.intent === "scheduling"
+      ? "solicitação de aula experimental gratuita"
+      : lead.intent === "assessment_result"
+        ? `resultado orientativo ${lead.estimatedLevel ?? ""} do English Check`
+        : "mensagem";
   const logoUrl = `${siteOrigin}/logoo.png`;
   const escapedName = escapeHtml(lead.fullName);
   const responseSentence =
@@ -320,9 +398,23 @@ function buildConfirmationEmail(
         "</div>",
       ].join("")
     : "";
+  const assessmentBlock =
+    lead.intent === "assessment_result"
+      ? [
+          '<div style="margin:22px 0;padding:16px;border:1px solid #e5e7eb;border-radius:10px;background:#f9fafb">',
+          '<p style="margin:0 0 6px;color:#6b7280;font-size:12px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase">Seu resultado orientativo</p>',
+          `<p style="margin:0;color:#111827;font-size:24px;font-weight:700">${escapeHtml(lead.estimatedLevel ?? "Nao calculado")}</p>`,
+          `<p style="margin:6px 0 0;color:#374151">Objetivo: ${escapeHtml(lead.goal ? GOAL_LABELS[lead.goal] : "Nao informado")}</p>`,
+          '<p style="margin:8px 0 0;color:#6b7280;font-size:12px">Este diagnostico breve nao e uma certificacao oficial.</p>',
+          "</div>",
+        ].join("")
+      : "";
 
   return {
-    subject: "Recebemos sua solicitação - Nerya",
+    subject:
+      lead.intent === "assessment_result"
+        ? `Seu resultado do English Check: ${lead.estimatedLevel ?? "Nerya"}`
+        : "Recebemos sua solicitação - Nerya",
     html: [
       '<div style="margin:0;background:#f7f8fb;padding:24px;font-family:Arial,sans-serif;line-height:1.55;color:#1f2937">',
       '<div style="margin:0 auto;max-width:600px;border:1px solid #e5e7eb;border-radius:14px;background:#ffffff;overflow:hidden">',
@@ -333,6 +425,7 @@ function buildConfirmationEmail(
       '<p style="margin:0 0 8px;color:#536184;font-size:12px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase">Solicitação recebida</p>',
       `<h1 style="margin:0 0 16px;font-size:28px;line-height:1.15;color:#111827">Obrigado, ${escapedName}.</h1>`,
       `<p style="margin:0 0 16px;color:#374151">Recebemos sua ${intentLabel}. ${responseSentence}</p>`,
+      assessmentBlock,
       scheduleBlock,
       '<p style="margin:0;color:#374151">Se quiser acrescentar alguma informação, responda diretamente este e-mail.</p>',
       "</div>",
@@ -344,6 +437,9 @@ function buildConfirmationEmail(
       "",
       `Obrigado, ${lead.fullName}.`,
       `Recebemos sua ${intentLabel}. ${responseSentence}`,
+      lead.intent === "assessment_result"
+        ? `Resultado orientativo: ${lead.estimatedLevel ?? "Nao calculado"}. Objetivo: ${lead.goal ? GOAL_LABELS[lead.goal] : "Nao informado"}. Este diagnostico nao e uma certificacao oficial.`
+        : "",
       lead.preferredSchedule ? `Disponibilidade informada: ${lead.preferredSchedule}` : "",
       "",
       "Se quiser acrescentar alguma informação, responda diretamente este e-mail.",

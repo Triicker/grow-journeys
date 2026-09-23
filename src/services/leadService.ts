@@ -14,6 +14,8 @@ type LeadApiPayload = LeadRequest & {
   renderedAt?: string;
 };
 
+type LeadSubmissionOptions = { deferWhatsApp?: boolean };
+
 function loadLocalLeads(): LeadRequest[] {
   return storage.get<LeadRequest[]>(STORAGE_KEYS.leadRequests, []);
 }
@@ -38,6 +40,9 @@ async function submitLeadToApi(lead: LeadApiPayload): Promise<ApiResponse<LeadSu
       preferredChannel: lead.preferredChannel,
       preferredSchedule: lead.preferredSchedule,
       message: lead.message,
+      goal: lead.goal,
+      perceivedLevel: lead.perceivedLevel,
+      estimatedLevel: lead.estimatedLevel,
       origin: lead.origin,
       website: lead.website,
       renderedAt: lead.renderedAt,
@@ -53,7 +58,10 @@ async function submitLeadToApi(lead: LeadApiPayload): Promise<ApiResponse<LeadSu
 }
 
 export const leadService = {
-  async submit(input: LeadSubmissionInput): Promise<ApiResponse<LeadSubmissionResult>> {
+  async submit(
+    input: LeadSubmissionInput,
+    options: LeadSubmissionOptions = {},
+  ): Promise<ApiResponse<LeadSubmissionResult>> {
     const now = new Date().toISOString();
     const lead: LeadRequest = {
       ...input,
@@ -61,14 +69,13 @@ export const leadService = {
       email: input.email.trim(),
       whatsapp: input.whatsapp?.trim() || undefined,
       preferredSchedule: input.preferredSchedule?.trim() || undefined,
-      message: input.message.trim(),
+      message: input.message?.trim() || undefined,
       origin: input.origin?.trim() || getCurrentOrigin(),
       id: `lead-${shortCode()}`,
       createdAt: now,
     };
 
-    const whatsappUrl =
-      lead.preferredChannel === "whatsapp" ? buildWhatsAppUrl(lead) : null;
+    const whatsappUrl = lead.preferredChannel === "whatsapp" ? buildWhatsAppUrl(lead) : null;
     if (lead.preferredChannel === "whatsapp" && !whatsappUrl) {
       throw new Error("Configure VITE_PUBLIC_WHATSAPP_NUMBER para usar o WhatsApp.");
     }
@@ -80,13 +87,13 @@ export const leadService = {
         renderedAt: input.renderedAt,
       });
 
-      if (whatsappUrl) {
+      if (whatsappUrl && !options.deferWhatsApp) {
         window.open(whatsappUrl, "_blank", "noopener,noreferrer");
       }
 
       const response = await submission;
 
-      if (whatsappUrl) {
+      if (whatsappUrl && !options.deferWhatsApp) {
         return {
           data: {
             ...response.data,
@@ -98,19 +105,36 @@ export const leadService = {
         };
       }
 
+      if (whatsappUrl) {
+        return { data: { ...response.data, whatsappUrl } };
+      }
+
       return response;
     }
 
     saveLocalLead(lead);
 
-    if (whatsappUrl) {
-      window.open(whatsappUrl, "_blank", "noopener,noreferrer");
+    if (whatsappUrl && !options.deferWhatsApp) {
+      if (!options.deferWhatsApp) window.open(whatsappUrl, "_blank", "noopener,noreferrer");
       return {
         data: {
           id: lead.id,
           status: "redirected",
           provider: "whatsapp-web",
           message: "Abrimos o WhatsApp com sua mensagem preenchida. Revise e envie por lá.",
+          whatsappUrl,
+          createdAt: now,
+        },
+      };
+    }
+
+    if (whatsappUrl) {
+      return {
+        data: {
+          id: lead.id,
+          status: "simulated",
+          provider: "mock",
+          message: "Dados registrados. Escolha como deseja continuar.",
           whatsappUrl,
           createdAt: now,
         },

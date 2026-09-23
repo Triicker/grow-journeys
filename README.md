@@ -46,6 +46,7 @@ Nunca coloque segredos (`DATABASE_URL`, `JWT_SECRET`, chaves de pagamento) em va
 ```
 src/
   components/      UI reutilizável
+  features/        English Check e agendamento público por domínio
   routes/          Rotas file-based TanStack
   layouts/         Layouts público e aluno
   repositories/    Contratos + mocks + stubs de API
@@ -89,7 +90,7 @@ A chave `RESEND_API_KEY` deve ficar somente no backend. Use `VITE_DATA_SOURCE=mo
 
 ## Rotas principais
 
-Públicas: `/`, `/planos`, `/agendar`, `/como-funciona`, `/contato`, `/privacidade`, `/entrar`.
+Públicas: `/`, `/nivel`, `/planos`, `/agendar`, `/agendar/horario`, `/como-funciona`, `/contato`, `/privacidade`, `/entrar`.
 
 Área do aluno: `/aluno`, `/aluno/agendar`, `/aluno/aulas`, `/aluno/historico`, `/aluno/plano`, `/aluno/perfil`.
 
@@ -102,6 +103,7 @@ Rotas antigas relacionadas a cursos, conteúdos e certificados foram mantidas ap
 - [`MELHORIAS_FUTURAS.md`](MELHORIAS_FUTURAS.md): pendências e evolução planejada.
 - [`docs/INTEGRACAO_RESEND.md`](docs/INTEGRACAO_RESEND.md): contrato seguro para notificações futuras.
 - [`docs/P0-FOUNDATION.md`](docs/P0-FOUNDATION.md): fundação de credibilidade, conversão, SEO, privacidade e analytics.
+- [`docs/P1-ENGLISH-CHECK-BOOKING.md`](docs/P1-ENGLISH-CHECK-BOOKING.md): diagnóstico anônimo, qualificação de leads e arquitetura de agenda pública.
 
 ## Deploy no Render (Web Service Node)
 
@@ -116,4 +118,6 @@ O projeto inclui `render.yaml`. Configure os segredos no painel do Render, espec
 ## Fora do escopo desta etapa
 
 Sem banco de dados, autenticação real, pagamentos reais, créditos reais ou reserva real de calendário.
-Nesta fase, somente a captação de leads por e-mail é real quando `VITE_LEADS_DATA_SOURCE=api`.
+O English Check é orientativo e fica na sessão do navegador. A agenda pública possui contrato para
+um provedor futuro, mas não inventa disponibilidade: enquanto não houver integração, direciona para
+o atendimento. Somente a captação de leads por e-mail é real quando `VITE_LEADS_DATA_SOURCE=api`.

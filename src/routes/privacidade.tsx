@@ -34,6 +34,12 @@ const sections = [
           A área demonstrativa do site também pode guardar sessão, preferências e dados simulados no
           armazenamento local do navegador. Esses dados não representam uma matrícula real.
         </p>
+        <p>
+          O English Check guarda temporariamente, na sessão do navegador, o objetivo, a percepção de
+          nível, as respostas e o resultado. As respostas individuais não são enviadas para
+          analytics nem persistidas no servidor. Se você solicitar contato ou envio do resultado,
+          apenas objetivo, níveis e dados informados no formulário acompanham o lead.
+        </p>
       </>
     ),
   },
