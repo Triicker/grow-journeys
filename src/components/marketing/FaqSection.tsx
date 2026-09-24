@@ -25,7 +25,7 @@ const FAQ_ITEMS = [
   {
     question: "Quem será meu professor?",
     answer:
-      "Você é acompanhado pelo mesmo professor ao longo do processo, o que ajuda a manter continuidade nos objetivos, no feedback e na evolução das aulas.",
+      "Você é acompanhado pelo professor qualificado ao longo do processo, o que ajuda a manter continuidade nos objetivos, no feedback e na evolução das aulas.",
   },
   {
     question: "Como funciona a aula experimental?",

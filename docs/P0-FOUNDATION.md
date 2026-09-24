@@ -6,7 +6,7 @@ Esta fase melhora a credibilidade, a proposta de valor, a conversão, a privacid
 
 ## Alterações realizadas
 
-- Hero reescrito para priorizar aulas individuais, continuidade com o mesmo professor, evolução personalizada, conversação, pronúncia, vocabulário e flexibilidade.
+- Hero reescrito para priorizar aulas individuais, continuidade com o professor qualificado, evolução personalizada, conversação, pronúncia, vocabulário e flexibilidade.
 - Seção institucional do professor com foto opcional, apresentação, experiência, especializações, metodologia, perfis atendidos e diferenciais.
 - Seção de depoimentos preparada para avatar e vídeo, sem publicar relatos ou estatísticas fictícias.
 - FAQ de conversão com accordion Radix acessível.
