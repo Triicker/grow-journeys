@@ -198,7 +198,7 @@
     font-family: var(--font-display);
     font-weight: 400;
     letter-spacing: 0.005em;
-    line-height: 1;
+    line-height: 1.12;
     text-transform: uppercase;
   }
 
@@ -217,7 +217,7 @@
     font-family: var(--font-display);
     text-transform: uppercase;
     letter-spacing: 0.012em;
-    line-height: 1;
+    line-height: 1.12;
   }
 
   .font-serif {
@@ -627,7 +627,7 @@
 
   h1,
   h2 {
-    line-height: 1.08;
+    line-height: 1.12;
     text-wrap: balance;
   }
 

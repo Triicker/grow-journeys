@@ -2,7 +2,6 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { PublicLayout } from "@/layouts/PublicLayout";
 import { Button } from "@/components/ui/button";
 import { FaqSection } from "@/components/marketing/FaqSection";
-import { TestimonialsSection } from "@/components/marketing/TestimonialsSection";
 import { siteConfig } from "@/config/site";
 import { trackEvent } from "@/lib/analytics";
 import { SpotlightCard } from "@/components/visual/SpotlightCard";
@@ -22,13 +21,13 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "Aulas individuais de inglês ao vivo, com o mesmo professor, plano personalizado e prática de conversação, pronúncia e vocabulário.",
+          "Aulas individuais de inglês ao vivo, com o professor qualificado, plano personalizado e prática de conversação, pronúncia e vocabulário.",
       },
       { property: "og:title", content: "Nerya | Aulas particulares de inglês" },
       {
         property: "og:description",
         content:
-          "Aulas individuais ao vivo, acompanhamento do mesmo professor e evolução personalizada.",
+          "Aulas individuais ao vivo, acompanhamento do professor qualificado e evolução personalizada.",
       },
       { property: "og:url", content: `${siteConfig.url}/` },
     ],
@@ -72,7 +71,7 @@ function HomePage() {
               Fluência que <span className="hero-word hero-word-violet">transforma.</span>
             </h1>
             <p className="mt-6 max-w-lg text-base leading-relaxed text-muted-foreground md:text-lg">
-              Aulas individuais ao vivo, com o mesmo professor acompanhando sua evolução em
+              Aulas individuais ao vivo, com o professor qualificado acompanhando sua evolução em
               conversação, pronúncia e vocabulário — no seu ritmo e com flexibilidade.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
@@ -99,7 +98,7 @@ function HomePage() {
             </div>
             <ul className="mt-10 flex flex-wrap items-center gap-x-6 gap-y-3 text-sm text-muted-foreground">
               <li className="inline-flex items-center gap-2">
-                <CheckCircle2 className="h-4 w-4 text-brand-light" /> Mesmo professor
+                <CheckCircle2 className="h-4 w-4 text-brand-light" /> Professor qualificado
               </li>
               <li className="inline-flex items-center gap-2">
                 <MailCheck className="h-4 w-4 text-brand-light" /> Confirmação automática por e-mail
@@ -253,8 +252,6 @@ function HomePage() {
           </ol>
         </div>
       </section>
-
-      <TestimonialsSection />
 
       <FaqSection />
 

@@ -48,7 +48,7 @@ function HowItWorks() {
     <PublicLayout>
       <section className="container-page max-w-5xl py-20" data-reveal>
         <p className="text-xs uppercase tracking-widest text-coral">Como funciona</p>
-        <h1 className="mt-2 font-display text-5xl leading-[0.95] md:text-7xl">
+        <h1 className="mt-2 font-display text-5xl leading-[1.12] md:text-7xl">
           INGLÊS AO VIVO,
           <br />
           COM <span className="text-lilac">ROTINA CLARA</span>.
