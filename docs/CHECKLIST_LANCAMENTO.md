@@ -45,12 +45,12 @@ HOST=0.0.0.0
 NITRO_PRESET=node-server
 RESEND_API_KEY=<cadastrar como secret>
 RESEND_FROM_EMAIL=Nerya <onboarding@resend.dev>
-RESEND_TO_EMAIL=guilherme.augusto.nery1@gmail.com
+RESEND_TO_EMAIL=somosnerya@gmail.com
 VITE_APP_ENV=production
 VITE_DATA_SOURCE=mock
 VITE_LEADS_DATA_SOURCE=api
 VITE_API_BASE_URL=/api
-VITE_PUBLIC_CONTACT_EMAIL=guilherme.augusto.nery1@gmail.com
+VITE_PUBLIC_CONTACT_EMAIL=somosnerya@gmail.com
 VITE_PUBLIC_WHATSAPP_NUMBER=<opcional>
 ```
 
@@ -60,7 +60,7 @@ verificar o domínio no Resend.
 ## Antes de publicar
 
 - Configurar `RESEND_API_KEY` no Environment do Render.
-- Confirmar se `guilherme.augusto.nery1@gmail.com` é o e-mail permitido para teste com `onboarding@resend.dev`.
+- Confirmar se `somosnerya@gmail.com` é o e-mail permitido para teste com `onboarding@resend.dev`.
 - Verificar domínio no Resend antes de enviar para destinatários fora das regras de teste.
 - Revisar se `/entrar`, `/cadastrar`, planos e área do aluno devem continuar visíveis como demonstrativos.
 - Revisar políticas obrigatórias: privacidade, termos e consentimento de contato.

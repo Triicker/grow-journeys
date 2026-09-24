@@ -69,7 +69,7 @@ Sem provider, a função é segura e não bloqueia o fluxo. Para integrar GA4, P
 
 - Substituir o perfil explicitamente marcado como editável em `src/config/site.ts` por nome, foto, experiência e especializações comprováveis do professor.
 - Coletar autorização e conteúdo real dos alunos antes de preencher `testimonials`.
-- Confirmar se `contato@nerya.online` está ativo antes de alterar a variável do ambiente de produção.
+- Manter `VITE_PUBLIC_CONTACT_EMAIL` e `RESEND_TO_EMAIL` configurados como `somosnerya@gmail.com` no ambiente de produção.
 - Confirmar regras comerciais de duração, remarcação e cancelamento; o FAQ atual orienta o visitante a validar essas condições no atendimento.
 - Definir prazo interno de retenção dos e-mails de leads e atualizar a política quando houver decisão operacional.
 

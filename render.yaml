@@ -17,7 +17,7 @@ services:
       - key: RESEND_FROM_EMAIL
         sync: false
       - key: RESEND_TO_EMAIL
-        value: guilherme.augusto.nery1@gmail.com
+        value: somosnerya@gmail.com
       - key: VITE_APP_ENV
         value: production
       - key: VITE_DATA_SOURCE
@@ -27,6 +27,6 @@ services:
       - key: VITE_API_BASE_URL
         value: /api
       - key: VITE_PUBLIC_CONTACT_EMAIL
-        value: guilherme.augusto.nery1@gmail.com
+        value: somosnerya@gmail.com
       - key: VITE_PUBLIC_WHATSAPP_NUMBER
         sync: false

@@ -26,9 +26,9 @@ Os tokens ficam em `src/styles.css` e são a única fonte para a linguagem visua
 | `--surface`         | `#161E2D` | cards e superfícies         |
 | `--surface-2`       | `#1B2438` | superfícies elevadas        |
 | `--brand`           | `#536184` | azul institucional          |
-| `--brand-light`     | `#7C89AA` | texto e detalhes da marca   |
+| `--brand-light`     | `#9BA9D1` | texto e detalhes da marca   |
 | `--neon-blue`       | `#6B8CFF` | luz elétrica localizada     |
-| `--neon-violet`     | `#8B75D6` | contraponto frio localizado |
+| `--neon-violet`     | `#A18BEA` | contraponto frio localizado |
 
 Azul elétrico e violeta frio são acentos, não substitutos da marca. Verde permanece restrito ao
 WhatsApp por reconhecimento funcional.

@@ -79,7 +79,7 @@ Servidor:
 ```text
 RESEND_API_KEY=
 RESEND_FROM_EMAIL=Nerya <onboarding@resend.dev>
-RESEND_TO_EMAIL=guilherme.augusto.nery1@gmail.com
+RESEND_TO_EMAIL=somosnerya@gmail.com
 ```
 
 Frontend público:
@@ -89,7 +89,7 @@ VITE_APP_ENV=production
 VITE_DATA_SOURCE=mock
 VITE_LEADS_DATA_SOURCE=api
 VITE_API_BASE_URL=/api
-VITE_PUBLIC_CONTACT_EMAIL=guilherme.augusto.nery1@gmail.com
+VITE_PUBLIC_CONTACT_EMAIL=somosnerya@gmail.com
 VITE_PUBLIC_WHATSAPP_NUMBER=
 ```
 

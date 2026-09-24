@@ -24,7 +24,7 @@ function Contact() {
     <PublicLayout>
       <section className="container-page grid max-w-4xl gap-10 py-16 md:grid-cols-2" data-reveal>
         <div>
-          <p className="text-xs uppercase tracking-widest text-primary">Contato</p>
+          <p className="text-xs uppercase tracking-widest text-brand-light">Contato</p>
           <h1 className="mt-2 font-display text-5xl leading-tight">Fale com a gente.</h1>
           <p className="mt-4 text-muted-foreground">
             Dúvidas sobre planos, aulas ou seus objetivos de inglês. Sua mensagem é enviada por

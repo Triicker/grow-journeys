@@ -108,10 +108,10 @@
   --brand: #536184;
   --brand-dark: #3f4a69;
   --brand-darker: #2e374f;
-  --brand-light: #7c89aa;
+  --brand-light: #9ba9d1;
   --brand-soft: #a8b1cf;
   --neon-blue: #6b8cff;
-  --neon-violet: #8b75d6;
+  --neon-violet: #a18bea;
   --paper: #f5f7fb;
 
   /* Profundidade e movimento — Nerya Night */
@@ -165,11 +165,11 @@
   --plan-panel-soft: #1a2540;
   --plan-ink: #f5f7fb;
   --plan-muted: #aeb6c8;
-  --plan-primary: #6776a6;
+  --plan-primary: #95a6dc;
   --plan-primary-dark: #425078;
-  --plan-primary-light: #a8b1cf;
+  --plan-primary-light: #c3cbea;
   --plan-border: rgba(124, 137, 170, 0.24);
-  --plan-detail: #8b75d6;
+  --plan-detail: #a18bea;
 }
 
 @layer base {
@@ -216,7 +216,7 @@
   .font-display {
     font-family: var(--font-display);
     text-transform: uppercase;
-    letter-spacing: 0.005em;
+    letter-spacing: 0.012em;
     line-height: 1;
   }
 
@@ -430,9 +430,9 @@
 .hero-word-violet {
   background-image: linear-gradient(
     112deg,
-    var(--brand) 8%,
+    var(--brand-light) 8%,
     var(--neon-violet) 58%,
-    var(--brand-light)
+    var(--brand-soft)
   );
   text-shadow: 0 0 30px rgba(139, 117, 214, 0.13);
 }
@@ -618,6 +618,19 @@
 }
 
 @media (max-width: 767px) {
+  h1,
+  h2,
+  h3,
+  .font-display {
+    letter-spacing: 0.022em;
+  }
+
+  h1,
+  h2 {
+    line-height: 1.08;
+    text-wrap: balance;
+  }
+
   .nerya-night main {
     background-size:
       auto,
