@@ -181,7 +181,7 @@ function Plans() {
                     )}
                   >
                     {plan.featured && (
-                      <Badge className="neon-badge absolute -top-3 left-4 gap-1 bg-plan-primary text-primary-foreground">
+                      <Badge className="neon-badge absolute -top-3 left-4 gap-1 bg-brand text-primary-foreground">
                         <Sparkles className="h-3 w-3" aria-hidden="true" />
                         Recomendado
                       </Badge>
@@ -217,13 +217,13 @@ function Plans() {
                         )}
                       </div>
                       <div className="mt-1" aria-label={priceAria}>
-                        <span className="font-display text-5xl leading-none text-plan-primary-dark">
+                        <span className="font-display text-5xl leading-none text-plan-ink">
                           {formatPriceBRL(plan.monthlyPriceCents)}
                         </span>
                       </div>
                       <div className="mt-3 min-h-7">
                         {saving ? (
-                          <span className="inline-flex rounded-md bg-plan-detail/15 px-2.5 py-1 text-xs font-semibold text-plan-primary-dark">
+                          <span className="inline-flex rounded-md bg-plan-detail/15 px-2.5 py-1 text-xs font-semibold text-plan-primary-light">
                             {saving}
                           </span>
                         ) : (
@@ -256,8 +256,8 @@ function Plans() {
                       <Button
                         type="button"
                         className={cn(
-                          "cta-primary min-h-11 w-full whitespace-normal bg-plan-primary px-3 text-center text-xs leading-tight text-primary-foreground hover:bg-plan-primary-dark",
-                          plan.featured && "bg-plan-primary-dark hover:bg-plan-primary",
+                          "cta-primary min-h-11 w-full whitespace-normal bg-brand px-3 text-center text-xs leading-tight text-primary-foreground hover:bg-brand-dark",
+                          plan.featured && "bg-brand-dark hover:bg-brand",
                         )}
                         disabled={disabled}
                         onClick={() => {

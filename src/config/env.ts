@@ -23,6 +23,6 @@ export const env = {
   apiBaseUrl: readString("VITE_API_BASE_URL", "http://localhost:3000/api"),
   enableMockErrors: readBool("VITE_ENABLE_MOCK_ERRORS", false),
   publicSiteUrl: readString("VITE_PUBLIC_SITE_URL", "https://nerya.online"),
-  publicContactEmail: readString("VITE_PUBLIC_CONTACT_EMAIL", "guilherme.augusto.nery1@gmail.com"),
+  publicContactEmail: readString("VITE_PUBLIC_CONTACT_EMAIL", "somosnerya@gmail.com"),
   publicWhatsAppNumber: readString("VITE_PUBLIC_WHATSAPP_NUMBER", ""),
 } as const;

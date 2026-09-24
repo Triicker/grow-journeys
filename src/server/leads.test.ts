@@ -5,7 +5,7 @@ import type { LeadEmailProvider } from "./resend";
 const env = {
   RESEND_API_KEY: "test-key",
   RESEND_FROM_EMAIL: "Nerya <onboarding@resend.dev>",
-  RESEND_TO_EMAIL: "guilherme.augusto.nery1@gmail.com",
+  RESEND_TO_EMAIL: "somosnerya@gmail.com",
 };
 
 function validPayload(overrides: Record<string, unknown> = {}) {
@@ -63,14 +63,14 @@ describe("handleLeadRequest", () => {
     expect(response.status).toBe(201);
     expect(emailProvider.send).toHaveBeenCalledTimes(2);
     const [payload] = emailProvider.send.mock.calls[0]!;
-    expect(payload.to).toBe("guilherme.augusto.nery1@gmail.com");
+    expect(payload.to).toBe("somosnerya@gmail.com");
     expect(payload.replyTo).toBe("guilherme@example.com");
     expect(payload.subject).toBe("Nerya - Contato pelo site");
     expect(payload.html).toContain("/logoo.png");
 
     const [confirmation] = emailProvider.send.mock.calls[1]!;
     expect(confirmation.to).toBe("guilherme@example.com");
-    expect(confirmation.replyTo).toBe("guilherme.augusto.nery1@gmail.com");
+    expect(confirmation.replyTo).toBe("somosnerya@gmail.com");
     expect(confirmation.subject).toBe("Recebemos sua solicitação - Nerya");
   });
 

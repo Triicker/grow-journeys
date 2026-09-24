@@ -64,7 +64,7 @@ function HowItWorks() {
               key={step.title}
               className="glow-card rounded-lg border border-border/60 bg-card p-5"
             >
-              <div className="grid h-10 w-10 place-items-center rounded-lg bg-primary/10 text-primary">
+              <div className="grid h-10 w-10 place-items-center rounded-lg bg-brand/10 text-brand-light">
                 <step.icon className="h-5 w-5" />
               </div>
               <div className="mt-5 font-display text-2xl text-foreground">
@@ -85,7 +85,7 @@ function HowItWorks() {
               "Próximos passos combinados diretamente no atendimento.",
             ].map((item) => (
               <li key={item} className="flex gap-2">
-                <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-primary" /> {item}
+                <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-brand-light" /> {item}
               </li>
             ))}
           </ul>

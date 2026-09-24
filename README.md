@@ -24,20 +24,20 @@ npm run start  # produção, depois do build
 
 Copie `.env.example` para `.env.local` e ajuste conforme necessário.
 
-| Variável                      | Descrição                                       | Padrão                              |
-| ----------------------------- | ----------------------------------------------- | ----------------------------------- |
-| `VITE_APP_NAME`               | Nome público do app                             | `Nerya`                             |
-| `VITE_APP_ENV`                | Ambiente (`development` / `production`)         | `development`                       |
-| `VITE_DATA_SOURCE`            | `mock` (dados locais) ou `api` (futuro)         | `mock`                              |
-| `VITE_LEADS_DATA_SOURCE`      | `mock` ou `api` apenas para leads públicos      | `mock`                              |
-| `VITE_API_BASE_URL`           | URL base da API                                 | `/api`                              |
-| `VITE_ENABLE_MOCK_ERRORS`     | Injeta falhas simuladas para testar erro/retry  | `false`                             |
-| `VITE_PUBLIC_SITE_URL`        | Origem pública usada em canonical e metadados   | `https://nerya.online`              |
-| `VITE_PUBLIC_CONTACT_EMAIL`   | E-mail público centralizado                     | `contato@nerya.online`              |
-| `VITE_PUBLIC_WHATSAPP_NUMBER` | Numero publico para WhatsApp Web, com DDI e DDD | vazio                               |
-| `RESEND_API_KEY`              | Chave secreta do Resend, somente servidor       | vazio                               |
-| `RESEND_FROM_EMAIL`           | Remetente verificado do Resend                  | `Nerya <onboarding@resend.dev>`     |
-| `RESEND_TO_EMAIL`             | Destinatario dos leads                          | `guilherme.augusto.nery1@gmail.com` |
+| Variável                      | Descrição                                       | Padrão                          |
+| ----------------------------- | ----------------------------------------------- | ------------------------------- |
+| `VITE_APP_NAME`               | Nome público do app                             | `Nerya`                         |
+| `VITE_APP_ENV`                | Ambiente (`development` / `production`)         | `development`                   |
+| `VITE_DATA_SOURCE`            | `mock` (dados locais) ou `api` (futuro)         | `mock`                          |
+| `VITE_LEADS_DATA_SOURCE`      | `mock` ou `api` apenas para leads públicos      | `mock`                          |
+| `VITE_API_BASE_URL`           | URL base da API                                 | `/api`                          |
+| `VITE_ENABLE_MOCK_ERRORS`     | Injeta falhas simuladas para testar erro/retry  | `false`                         |
+| `VITE_PUBLIC_SITE_URL`        | Origem pública usada em canonical e metadados   | `https://nerya.online`          |
+| `VITE_PUBLIC_CONTACT_EMAIL`   | E-mail público centralizado                     | `somosnerya@gmail.com`          |
+| `VITE_PUBLIC_WHATSAPP_NUMBER` | Numero publico para WhatsApp Web, com DDI e DDD | vazio                           |
+| `RESEND_API_KEY`              | Chave secreta do Resend, somente servidor       | vazio                           |
+| `RESEND_FROM_EMAIL`           | Remetente verificado do Resend                  | `Nerya <onboarding@resend.dev>` |
+| `RESEND_TO_EMAIL`             | Destinatario dos leads                          | `somosnerya@gmail.com`          |
 
 Nunca coloque segredos (`DATABASE_URL`, `JWT_SECRET`, chaves de pagamento) em variáveis `VITE_*`.
 

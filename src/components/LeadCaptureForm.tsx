@@ -187,7 +187,7 @@ export function LeadCaptureForm({ intent, title, description }: LeadCaptureFormP
       noValidate
     >
       <div>
-        <p className="text-xs uppercase tracking-widest text-primary">
+        <p className="text-xs uppercase tracking-widest text-brand-light">
           {intent === "scheduling" ? "Aula experimental" : "Contato"}
         </p>
         <h2 className="mt-2 font-display text-3xl">
