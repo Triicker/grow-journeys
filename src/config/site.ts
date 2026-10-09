@@ -1,5 +1,7 @@
 import { env } from "@/config/env";
 
+const siteUrl = env.publicSiteUrl.replace(/\/$/, "");
+
 export type Testimonial = {
   id: string;
   name: string;
@@ -12,8 +14,12 @@ export type Testimonial = {
 
 export const siteConfig = {
   name: "Nerya",
-  url: env.publicSiteUrl.replace(/\/$/, ""),
+  url: siteUrl,
   tagline: "Inglês que conecta. Fluência que transforma.",
+  assets: {
+    logo: `${siteUrl}/logoo.png`,
+    socialImage: `${siteUrl}/og-image.png`,
+  },
   contact: {
     email: env.publicContactEmail,
     location: "Bahia — Brasil",

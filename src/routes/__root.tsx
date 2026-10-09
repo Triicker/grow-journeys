@@ -7,13 +7,11 @@ import {
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
-import { useEffect, type ReactNode } from "react";
+import type { ReactNode } from "react";
 import { Toaster } from "@/components/ui/sonner";
 import { siteConfig } from "@/config/site";
 
 import appCss from "../styles.css?url";
-import browserIcon from "../utils/logoo.png?url";
-import { reportLovableError } from "../lib/lovable-error-reporting";
 
 function NotFoundComponent() {
   return (
@@ -40,9 +38,6 @@ function NotFoundComponent() {
 function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
   console.error(error);
   const router = useRouter();
-  useEffect(() => {
-    reportLovableError(error, { boundary: "tanstack_root_error_component" });
-  }, [error]);
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
@@ -103,20 +98,22 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       },
       {
         property: "og:image",
-        content:
-          "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/f881b730-f1b0-4b91-a833-26c16a25fa1c/id-preview-a25be25a--3953b802-f4b2-4fdf-b200-077fb3753c8b.lovable.app-1784635468939.png",
+        content: siteConfig.assets.socialImage,
       },
+      { property: "og:image:width", content: "1200" },
+      { property: "og:image:height", content: "630" },
+      { property: "og:image:alt", content: "Nerya — Inglês Online" },
       {
         name: "twitter:image",
-        content:
-          "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/f881b730-f1b0-4b91-a833-26c16a25fa1c/id-preview-a25be25a--3953b802-f4b2-4fdf-b200-077fb3753c8b.lovable.app-1784635468939.png",
+        content: siteConfig.assets.socialImage,
       },
+      { name: "twitter:image:alt", content: "Nerya — Inglês Online" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
-      { rel: "icon", href: browserIcon, type: "image/png" },
-      { rel: "shortcut icon", href: browserIcon, type: "image/png" },
-      { rel: "apple-touch-icon", href: browserIcon },
+      { rel: "icon", href: "/favicon.ico", type: "image/x-icon", sizes: "16x16 32x32 48x48" },
+      { rel: "icon", href: "/favicon-48x48.png", type: "image/png", sizes: "48x48" },
+      { rel: "apple-touch-icon", href: "/apple-touch-icon.png", sizes: "180x180" },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       {
@@ -137,6 +134,8 @@ function RootShell({ children }: { children: ReactNode }) {
     "@type": "Organization",
     name: siteConfig.name,
     url: siteConfig.url,
+    logo: siteConfig.assets.logo,
+    image: siteConfig.assets.socialImage,
     email: siteConfig.contact.email,
     sameAs: [siteConfig.contact.instagramUrl],
   };

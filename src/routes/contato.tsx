@@ -13,6 +13,7 @@ export const Route = createFileRoute("/contato")({
         content:
           "Fale com a Nerya sobre aulas e planos. Envie sua mensagem por e-mail e continue pelo WhatsApp.",
       },
+      { property: "og:url", content: `${siteConfig.url}/contato` },
     ],
     links: [{ rel: "canonical", href: `${siteConfig.url}/contato` }],
   }),

@@ -14,6 +14,7 @@ export const Route = createFileRoute("/como-funciona")({
         content:
           "Entenda como solicitar uma aula experimental gratuita e conhecer as aulas particulares da Nerya.",
       },
+      { property: "og:url", content: `${siteConfig.url}/como-funciona` },
     ],
     links: [{ rel: "canonical", href: `${siteConfig.url}/como-funciona` }],
   }),

@@ -51,6 +51,7 @@ export const Route = createFileRoute("/planos/")({
         name: "description",
         content: "Conheça os planos de inglês da Nerya e marque uma aula experimental gratuita.",
       },
+      { property: "og:url", content: `${siteConfig.url}/planos` },
     ],
     links: [{ rel: "canonical", href: `${siteConfig.url}/planos` }],
   }),

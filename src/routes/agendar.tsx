@@ -12,6 +12,7 @@ export const Route = createFileRoute("/agendar")({
         content:
           "Solicite sua aula experimental gratuita de inglês e escolha entre consultar horários ou continuar pelo WhatsApp.",
       },
+      { property: "og:url", content: `${siteConfig.url}/agendar` },
     ],
     links: [{ rel: "canonical", href: `${siteConfig.url}/agendar` }],
   }),

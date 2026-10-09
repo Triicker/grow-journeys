@@ -45,9 +45,21 @@ function isH3SwallowedErrorBody(body: string): boolean {
   }
 }
 
+function redirectWwwToCanonicalHost(request: Request): Response | undefined {
+  const url = new URL(request.url);
+  if (url.hostname !== "www.nerya.online") return undefined;
+
+  url.protocol = "https:";
+  url.hostname = "nerya.online";
+  return Response.redirect(url, 308);
+}
+
 export default {
   async fetch(request: Request, env: unknown, ctx: unknown) {
     try {
+      const canonicalRedirect = redirectWwwToCanonicalHost(request);
+      if (canonicalRedirect) return canonicalRedirect;
+
       const apiResponse = await handleApiRequest(request, env);
       if (apiResponse) return apiResponse;
 
